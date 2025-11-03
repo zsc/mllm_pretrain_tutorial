@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第四章：文本数据——抓取、清洗、去重与质量分层</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <ul class="nav-list"><li class=""><a href="index.html">多模态自回归大模型预训练（1B–30B）——公开教程（Index）</a></li><li class=""><a href="chapter1.html">第一章：总览与技术路线</a></li><li class=""><a href="chapter2.html">第二章：项目管理与里程碑——从计划到交付的路线图</a></li><li class=""><a href="chapter3.html">第三章：数据配方设计——构建 100T Token 的多模态数据池</a></li><li class="active"><a href="chapter4.html">第四章：文本数据——抓取、清洗、去重与质量分层</a></li><li class=""><a href="chapter5.html">第五章：音频数据——合规抓取、质量过滤与 RVQ 离散化</a></li><li class=""><a href="chapter6.html">chapter6.md — 视频数据：合规抓取、切片、时空离散化</a></li><li class=""><a href="chapter7.html">第七章：图像数据——采集、质量打分与离散化</a></li><li class=""><a href="chapter8.html">第八章：Tokenizer 与词表：多模扩词、特殊符与对齐标注</a></li><li class=""><a href="CLAUDE.html">Untitled</a></li></ul>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="_1">第四章：文本数据——抓取、清洗、去重与质量分层</h1>
+<h2 id="_2">开篇段落</h2>
+<p>文本是多模态模型的基石，其质量和多样性直接决定了模型语言能力的上限和世界知识的广度。在本章中，我们将深入探讨如何从零开始，构建一条工业级的文本数据处理流水线，目标是为我们的 100T token 数据池贡献约 94T 高质量、多样化且合规的文本 token。我们将覆盖从数据抓取策略、多阶段清洗过滤，到高效去重技术，再到最终的质量分层与采样，确保每一枚送入训练的 token 都物有所值。本章的学习目标是让读者掌握设计和实施一个可扩展、可审计、可回溯的文本数据治理系统的完整方法论。</p>
+<h2 id="41">4.1 数据抓取策略：来源、合规与架构</h2>
+<p>构建大规模文本语料库的第一步是确定数据来源并设计一个稳健的抓取系统。我们的策略是“广度与深度并重”，即结合通用网页爬取与对高质量特定源的深度挖掘。</p>
+<h3 id="411">4.1.1 数据源矩阵</h3>
+<p>| 来源类型         | 示例                                     | 核心价值       | 抓取策略与注意事项                                                                   |</p>
+<table>
+<thead>
+<tr>
+<th>来源类型</th>
+<th>示例</th>
+<th>核心价值</th>
+<th>抓取策略与注意事项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>通用网页抓取</strong></td>
+<td>Common Crawl (CC), 自建爬虫 (RefinedWeb-like)</td>
+<td>广度、多样性、时效性</td>
+<td>复用 CC 快照作为冷启动，自建分布式爬虫持续增量抓取。严格遵守 <code>robots.txt</code>，实现礼貌性策略（IP轮换、延迟）。</td>
+</tr>
+<tr>
+<td><strong>高质量知识库</strong></td>
+<td>Wikipedia, Wikibooks, ArXiv, PubMed</td>
+<td>深度、准确性、结构化</td>
+<td>使用官方 API 或 dump 文件。需编写专用解析器处理 wiki 标记、LaTeX 公式、XML 结构。</td>
+</tr>
+<tr>
+<td><strong>专业领域社区</strong></td>
+<td>StackExchange, 合规技术论坛/博客</td>
+<td>问答、代码、专业对话</td>
+<td>优先使用官方数据 dump。抓取时注意保留代码块、问题-答案对等结构信息。</td>
+</tr>
+<tr>
+<td><strong>书籍与文献</strong></td>
+<td>Gutenberg, 公共领域图书馆</td>
+<td>长篇连贯性、叙事结构</td>
+<td>版权核查是第一要务。处理 PDF/EPUB 格式转换，并进行章节切分和元数据提取。</td>
+</tr>
+<tr>
+<td><strong>新闻与政府</strong></td>
+<td>合规新闻源聚合、政府/法律公开文件</td>
+<td>事实性、正式语体</td>
+<td>警惕聚合器引入的重复内容。政府文件需注意许可协议（如 Creative Commons）。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="412">4.1.2 抓取系统架构</h3>
+<p>一个生产级的抓取系统需要考虑可扩展性和容错性。</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">+-----------------+</span><span class="c">      </span><span class="nb">+-----------------------+</span><span class="c">      </span><span class="nb">+-------------------+</span><span class="c">      </span><span class="nb">+-----------------+</span>
+<span class="c">|  URL Frontier   |</span><span class="nb">-----</span><span class="nv">&gt;</span><span class="c">|  Distributed Crawlers |</span><span class="nb">-----</span><span class="nv">&gt;</span><span class="c">|  Raw Data Store   |</span><span class="nb">-----</span><span class="nv">&gt;</span><span class="c">|   ETL Trigger   |</span>
+<span class="c">| (Kafka/Redis)   |      | (e</span><span class="nt">.</span><span class="c">g</span><span class="nt">.,</span><span class="c"> Scrapy Cluster)|      | (Object Storage)  |      | (Airflow/Argo)  |</span>
+<span class="nb">+-----------------+</span><span class="c">      </span><span class="nb">+-----------------------+</span><span class="c">      </span><span class="nb">+-------------------+</span><span class="c">      </span><span class="nb">+-----------------+</span>
+<span class="c">       ^                           |                             |</span>
+<span class="c">       |                           | User</span><span class="nb">-</span><span class="c">Agent Rotation         |</span>
+<span class="c">       </span><span class="nb">+---------------------------+</span><span class="c"> &amp; Rate Limiting             |</span>
+
+<span class="c">       </span><span class="nb">+---------------------------+</span><span class="c"> &amp; Rate Limiting             |</span>
+<span class="c">       |                                                         |</span>
+<span class="c">       | Seed URLs &amp;                                             v</span>
+<span class="c">       | Discovered URLs                                   To Cleaning Pipeline</span>
+</code></pre></div>
+
+<ul>
+<li><strong>URL Frontier</strong>: 优先级队列，管理待抓取和已抓取的 URL，支持去重和调度。</li>
+<li><strong>Distributed Crawlers</strong>: 无状态的爬虫节点，从 Frontier 获取任务，执行下载、解析，并将原始 HTML/文本存入对象存储。</li>
+<li><strong>Raw Data Store</strong>: 如 S3/OSS，存储未经处理的原始数据，作为数据溯源的起点。</li>
+<li><strong>ETL Trigger</strong>: 当新数据写入时，自动触发下游的清洗流水线。</li>
+</ul>
+<blockquote>
+<p><strong>Rule-of-Thumb</strong>:
+初始阶段，可直接利用 Common Crawl 的 WARC 文件进行处理，这能快速获得海量数据基线。同时，并行启动针对高价值源（如 Wikipedia, ArXiv）的抓取与解析管线。自建通用爬虫的优先级可以稍后，用于补充特定领域或提高数据时效性。</p>
+</blockquote>
+<h2 id="42">4.2 多阶段清洗与过滤流水线</h2>
+<p>原始文本充满了噪声（HTML 标签、广告、导航栏）和低质量内容。我们的清洗策略是一个层层过滤的漏斗，确保效率与质量。</p>
+<div class="codehilite"><pre><span></span><code><span class="n">Raw</span><span class="w"> </span><span class="n">HTML</span><span class="o">/</span><span class="n">Text</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="mf">1.</span><span class="w"> </span><span class="n">Boilerplate</span><span class="w"> </span><span class="n">Removal</span><span class="p">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="mf">2.</span><span class="w"> </span><span class="n">Heuristic</span><span class="w"> </span><span class="n">Filtering</span><span class="p">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="mf">3.</span><span class="w"> </span><span class="n">Language</span><span class="w"> </span><span class="n">ID</span><span class="p">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="mf">4.</span><span class="w"> </span><span class="n">Quality</span><span class="w"> </span><span class="n">Filtering</span><span class="p">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">[</span><span class="mf">5.</span><span class="w"> </span><span class="n">Safety</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">PII</span><span class="p">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Cleaned</span><span class="w"> </span><span class="n">Corpus</span>
+</code></pre></div>
+
+<ol>
+<li>
+<p><strong>Boilerplate (样板) 去除</strong>:</p>
+<ul>
+<li><strong>方法</strong>: 使用 <code>trafilatura</code>, <code>readability-lxml</code> 等库，基于 HTML 结构和文本密度启发式地提取正文内容。</li>
+<li><strong>目标</strong>: 去除导航、页眉、页脚、广告等非核心内容。</li>
+</ul>
+</li>
+<li>
+<p><strong>启发式过滤 (Heuristic Filtering)</strong>:</p>
+<ul>
+<li><strong>方法</strong>: 一系列基于规则的快速检查，用于剔除明显异常的文档。</li>
+<li><strong>常见规则</strong>:<ul>
+<li>文档长度过短 (&lt; 200 字符) 或过长 (&gt; 1M 字符)。</li>
+<li>平均词长异常（过短可能多为符号，过长可能为乱码）。</li>
+<li>符号或数字占比过高。</li>
+<li>重复行/段落过多（"lorem ipsum" 类占位符）。</li>
+<li>缺少基本标点符号。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>语言识别 (Language Identification)</strong>:</p>
+<ul>
+<li><strong>方法</strong>: 使用 <code>fasttext</code> 的预训练语言识别模型。它速度快、准确率高，且支持数百种语言。</li>
+<li><strong>应用</strong>: 为每个文档打上语言标签（如 <code>en</code>, <code>zh-cn</code>），不符合我们目标语言配比（中英 90%，其他 10%）的文档可以被丢弃或分流。</li>
+</ul>
+</li>
+<li>
+<p><strong>质量过滤 (Quality Filtering)</strong>:</p>
+<ul>
+<li><strong>方法</strong>: 训练一个分类模型来给文档打分。这是确保语料质量的核心步骤。<ul>
+<li><strong>模型选择</strong>: <code>fasttext</code> 分类器或一个小型 Transformer 模型（如 300M 的 BERT）。<code>fasttext</code> 速度极快，适合大规模处理；Transformer 精度更高。</li>
+<li><strong>训练数据</strong>: 正样本可选用 Wikipedia、高质量书籍、ArXiv 论文；负样本可选用从 Common Crawl 中随机采样并经过少量过滤的网页，或启发式过滤阶段淘汰的文档。</li>
+<li><strong>应用</strong>: 对每个文档进行推理，只保留得分高于某一阈值（如 0.6）的文档。该阈值可通过人工抽样评估来校准。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>安全与个人信息 (Safety &amp; PII) 过滤</strong>:</p>
+<ul>
+<li><strong>方法</strong>: 结合正则表达式、命名实体识别 (NER) 和分类模型。<ul>
+<li><strong>PII</strong>: 使用正则表达式检测邮箱、电话号码、IP 地址、身份证号等。使用多语言 NER 模型识别姓名、地址。</li>
+<li><strong>Toxicity</strong>: 使用预训练的毒性内容分类器（如 Jigsaw's Perspective API 的开源替代品）来识别仇恨言论、成人内容等，并进行过滤或分级。</li>
+</ul>
+</li>
+<li><strong>合规</strong>: 这一步至关重要，必须严格执行，以规避法律和伦理风险。</li>
+</ul>
+</li>
+</ol>
+<h2 id="43">4.3 高效去重：从精确匹配到语义近邻</h2>
+<p>重复数据会浪费计算资源，并可能导致模型过拟合，降低泛化能力。去重分为两个层次：</p>
+<h3 id="431-exact-deduplication">4.3.1 精确去重 (Exact Deduplication)</h3>
+<ul>
+<li><strong>方法</strong>: 对每个文档进行规范化（转小写、去标点、去连续空白），然后计算其哈希值（如 SHA256）。</li>
+<li><strong>实现</strong>: 使用一个巨大的分布式哈希集合（如 Redis set 或 RocksDB）来存储所有见过的哈希值。对于新来的文档，计算其哈希，若已存在于集合中，则丢弃。</li>
+<li><strong>挑战</strong>: 内存占用。对于 94T token（约几十亿个文档），哈希集合可能达到百 GB 级别，需要分布式方案。</li>
+</ul>
+<h3 id="432-near-deduplication">4.3.2 近似去重 (Near-Deduplication)</h3>
+<p>许多文档内容高度相似但非完全相同如新闻稿转载、文章略微修改）。</p>
+<ul>
+<li><strong>方法</strong>: MinHash + LSH (Locality Sensitive Hashing) 是工业界广泛采用的方案。<ol>
+<li><strong>分词 (Shingling)</strong>: 将文档拆分成 k-grams（shingles），例如 <code>k=5</code> 的字符级别 shingle。每个文档变成一个 shingle 集合。</li>
+<li><strong>签名 (MinHashing)</strong>: 使用 N 个不同的哈希函数，对每个文档的 shingle 集合计算 N 个最小哈希值，形成一个紧凑的 N 维签名向量（MinHash Signature）。</li>
+<li><strong>分桶 (LSH)</strong>: 将 N 维签名向量分成 <code>b</code> 个 band，每个 band 有 <code>r</code> 行 (<code>N = b * r</code>)。对每个 band 计算一个哈希值，将签名放入对应的哈希桶中。</li>
+<li><strong>候选对</strong>: 同一哈希桶中的文档对，即为高度相似的候选对。</li>
+<li><strong>校验</strong>: 对候选对计算精确的 Jaccard 相似度，超过阈值（如 0.8）的则判定为重复，只保留其一。</li>
+</ol>
+</li>
+</ul>
+<blockquote>
+<p><strong>Rule-of-Thumb for MinHash+LSH</strong>:</p>
+<ul>
+<li><code>k</code> (shingle size): 5 到 9 之间，<code>k</code> 越大对文本的微小变化越敏感。</li>
+<li><code>N</code> (hashes): 128 或 256 是常见的选择。</li>
+<li><code>b</code> and <code>r</code> (bands and rows): 这两个参数控制着召回率和精确率的权衡。一个近似的相似度阈值 <code>t</code> 可以由公式 <code>t ≈ (1/b)^(1/r)</code> 估算。例如，<code>b=20, r=5</code> (N=100) 大致对应于 <code>t ≈ (1/20)^(1/5) ≈ 0.44</code> 的相似度阈值。你需要根据实际数据分布调整。</li>
+<li><strong>实现</strong>: 通常使用 Spark 或 Dask 等分布式计算框架来处理海量文档的 MinHash LSH 计算。</li>
+</ul>
+</blockquote>
+<div class="codehilite"><pre><span></span><code><span class="n">Document</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nf">Normalize</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Shingles</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MinHash</span><span class="w"> </span><span class="n">Signature</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">LSH</span><span class="w"> </span><span class="n">Bands</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Candidate</span><span class="w"> </span><span class="n">Pairs</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Verification</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Unique</span><span class="w"> </span><span class="n">Document</span>
+</code></pre></div>
+
+<h2 id="44">4.4 质量分层与数据配方</h2>
+<p>并非所有干净的数据都同等重要。为了在训练中进行更精细的控制，我们将清洗、去重后的语料库进行质量分层。</p>
+<p>| 层级       | 描述                                     | 示例数据源                                     | 采样权重（训练时） |</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>描述</th>
+<th>示例数据源</th>
+<th>采样权重（训练时）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>S-Tier (铂金)</strong></td>
+<td>结构清晰、信息准确、语言规范的黄金标准数据</td>
+<td>Wikipedia, ArXiv, Books, 专业教科书</td>
+<td>高 (e.g., 3.0x)</td>
+</tr>
+<tr>
+<td><strong>A-Tier (黄金)</strong></td>
+<td>质量较高、内容可靠的通用数据</td>
+<td>高质量新闻, StackExchange, RefinedWeb 高分部分</td>
+<td>中 (e.g., 1.5x)</td>
+</tr>
+<tr>
+<td><strong>B-Tier (白银)</strong></td>
+<td>通过所有清洗流程的普通网页数据</td>
+<td>RefinedWeb 中位数部分</td>
+<td>基础 (e.g., 1.0x)</td>
+</tr>
+<tr>
+<td><strong>C-Tier (青铜)</strong></td>
+<td>可能包含口语化、特定噪声但有信息量的领域数据</td>
+<td>部分社交媒体、论坛长文</td>
+<td>低 (e.g., 0.5x)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>分层依据</strong>: 数据来源的固有信誉度、质量模型打分、以及其他元数据（如代码片段占比、公式密度等）。</li>
+<li><strong>应用</strong>: 在构建训练批次时（详见 Chapter 11），我们可以根据这个分层进行<strong>加权采样</strong>。例如，在训练早期，可以超采（oversample）S-Tier 和 A-Tier 数据，帮助模型快速学习核心知识和语言结构。</li>
+</ul>
+<h2 id="_3">本章小结</h2>
+<p>本章详细阐述了构建一个生产级文本数据处理系统的全过程。我们从设计一个合规、可扩展的抓取策略开始，然后构建了一个多阶段的清洗与过滤流水线，该流水线结合了启发式规则、语言模型和安全检查，以确保数据质量。接着，我们深入探讨了精确去重和基于 MinHash LSH 的近似去重技术，以消除数据冗余。最后，我们提出了质量分层的概念，将处理后的数据划分为不同等级，为后续的智能数据采样和模型训练打下坚实基础。一个健壮的文本数据管道是多模态模型成功的无声英雄。</p>
+<h2 id="gotchas">常见陷阱与错误 (Gotchas)</h2>
+<ol>
+<li>
+<p><strong>“清洗不足” vs. “清洗过度”</strong>:</p>
+<ul>
+<li><strong>陷阱</strong>: 过于宽松的规则会导致大量噪声污染训练数据；过于严苛的规则则可能过滤掉有价值的非标准文本如诗歌、代码、口语化对话），损害数据多样性。</li>
+<li><strong>调试技巧</strong>: 建立一个小型、多样化的“黄金”评估集。在调整过滤规则或质量模型阈值时，持续监控其在该评估集上的召回率。同时，对被过滤掉的数据进行随机抽样审查，确保没有“错杀好人”。</li>
+</ul>
+</li>
+<li>
+<p><strong>去重粒度问题</strong>:</p>
+<ul>
+<li><strong>陷阱</strong>: 只进行文档级去重，会漏掉大量段落级、句子级的重复（例如，新闻摘要、法律条文引用）。这会导致模型在训练时反复看到相同的片段。</li>
+<li><strong>调试技巧</strong>: 除了文档级 MinHash，可以考虑对文档进行滑动窗口切块，对每个块进行近似去重。这计算成本更高，但能有效缓解段落级重复。对于非常重要的数据源（如 S-Tier），值得付出这个成本。</li>
+</ul>
+</li>
+<li>
+<p><strong>质量模型的偏见 (Bias in Quality Models)</strong>:</p>
+<ul>
+<li><strong>陷阱</strong>: 用于质量打分的分类器，如果其训练数据有偏见（例如，只用百科和新闻作正样本），可能会错误地给某些领域的专业文档（如法律文件、医学报告）或不同文体的文本（如小说）打低分。</li>
+<li><strong>调试技巧</strong>: 确保质量模型的训练数据覆盖尽可能多的领域和文体。在模型上线前，在多个领域的 hold-out 测试集上评估其性能，并对打分较低的类别进行人工审查，发现并纠正模型的系统性偏见。</li>
+</ul>
+</li>
+<li>
+<p><strong>资源估算陷阱</strong>:</p>
+<ul>
+<li><strong>陷阱</strong>: 近似去重（尤其是 MinHash LSH）的计算和内存开销巨大。在没有充分规划的情况下启动一个 PB 级原始数据的去重任务，很容易导致集群资源耗尽或任务运行数周。</li>
+<li><strong>调试技巧</strong>: 先在 1% 或 10% 的数据样本上运行去重流程，估算出单机处理能力、内存峰值和网络 IO。基于此进行线性外推，并增加 50% 的 buffer 来规划整个任务所需的计算资源和时间。</li>
+</ul>
+</li>
+<li>
+<p><strong>忽视数据溯源 (Data Lineage)</strong>:</p>
+<ul>
+<li><strong>陷阱</strong>: 在多阶段处理后，记了每个干净文档的原始来源（URL、文件名）和处理历史（经过了哪些过滤器、质量得分）。这使得问题排查（如发现一批坏数据）和合规性审计变得几乎不可能。</li>
+<li><strong>调试技巧</strong>: 在数据处理的每一步都保留元数据。使用 Parquet 或 ORC 等列式存储格式，将文档内容和其元数据（<code>source_url</code>, <code>crawl_timestamp</code>, <code>quality_score</code>, <code>lang_id</code>, <code>sha256_hash</code> 等）存储在一起。确保整个数据湖是可审计和可回溯的。</li>
+</ul>
+</li>
+</ol>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter3.html" class="nav-link prev">← 第三章：数据配方设计——构建 100T Token 的多模态数据池</a><a href="chapter5.html" class="nav-link next">第五章：音频数据——合规抓取、质量过滤与 RVQ 离散化 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>
