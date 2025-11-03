@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="./">
-    <title>第三章：数据配方设计——构建 100T Token 的多模态数据池</title>
+    <title>chapter2.md — 项目管理与里程碑</title>
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/highlight.css">
     <script src="assets/script.js" defer></script>
@@ -42,274 +42,257 @@
                 <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
             </div>
             <div id="tree-container">
-                <ul class="nav-list"><li class=""><a href="index.html">多模态自回归大模型预训练（1B–30B）——公开教程（Index）</a></li><li class=""><a href="chapter1.html">第一章：总览与技术路线</a></li><li class=""><a href="chapter2.html">第二章：项目管理与里程碑——从计划到交付的路线图</a></li><li class="active"><a href="chapter3.html">第三章：数据配方设计——构建 100T Token 的多模态数据池</a></li><li class=""><a href="chapter4.html">第四章：文本数据——抓取、清洗、去重与质量分层</a></li><li class=""><a href="chapter5.html">第五章：音频数据——合规抓取、质量过滤与 RVQ 离散化</a></li><li class=""><a href="chapter6.html">chapter6.md — 视频数据：合规抓取、切片、时空离散化</a></li><li class=""><a href="chapter7.html">第七章：图像数据——采集、质量打分与离散化</a></li><li class=""><a href="chapter8.html">第八章：Tokenizer 与词表：多模扩词、特殊符与对齐标注</a></li><li class=""><a href="CLAUDE.html">Untitled</a></li></ul>
+                <ul class="nav-list"><li class=""><a href="index.html">index.md（导读与目录）</a></li><li class=""><a href="chapter1.html">Chapter 1: 总览与技术路线</a></li><li class=""><a href="chapter2.html">chapter2.md — 项目管理与里程碑</a></li><li class="active"><a href="chapter3.html">chapter2.md — 项目管理与里程碑</a></li><li class=""><a href="chapter4.html">第四章：文本数据——抓取、清洗、去重与质量分层</a></li><li class=""><a href="chapter5.html">第五章：音频数据——合规抓取、质量过滤与 RVQ 离散化</a></li><li class=""><a href="chapter6.html">chapter6.md — 视频数据：合规抓取、切片、时空离散化</a></li><li class=""><a href="chapter7.html">第七章：图像数据——采集、质量打分与离散化</a></li><li class=""><a href="chapter8.html">第八章：Tokenizer 与词表：多模扩词、特殊符与对齐标注</a></li><li class=""><a href="CLAUDE.html">Untitled</a></li></ul>
             </div>
         </nav>
         
         <main class="content">
             <article>
-                <h1 id="100t-token">第三章：数据配方设计——构建 100T Token 的多模态数据池</h1>
-<h2 id="_1">开篇段落</h2>
-<p>数据是预训练模型的基石和灵魂。本章将详细阐述如何设计一个生产级的、规模高达 100 万亿（100T）Token 的多模态数据池，这是我们整个项目的数据“蓝图”。我们将从顶层原则出发，深入探讨数据预算的量化分配、质量分层的重要性、动态采样的策略，以及如何将抽象的数据目标转化为具体的存储和计算需求。完成本章后，您将能够为任何规模的多模态预训练项目设计一份科学、可执行且可观测的数据配方，确保模型在“喂养”阶段就能获得最优的“营养”组合。</p>
-<h2 id="1">1. 数据配方的核心原则</h2>
-<p>一个优秀的数据配方不仅是数据集的简单堆砌，更是对模型预期能力的一种精心规划。它必须遵循下几个核心原则：</p>
+                <h1 id="chapter2md">chapter2.md — 项目管理与里程碑</h1>
+<h2 id="21">2.1 开篇与学习目标</h2>
+<p>训练一个生产级的多模态大模型，其复杂性远超于单纯的算法实现，本质上是一项涉及多团队、长周期、高投入的大型系统工程。本章将从工程管理的视角，剖析如何组织和规划这样一个项目。我们将跳出代码和模型结构，聚焦于成功交付项目所需的“软技能”与“硬流程”。</p>
+<p><strong>学习目标:</strong></p>
 <ul>
-<li><strong>质量优先于数量 (Quality over Quantity)</strong>：低质量、重复或有害的数据会严重损害模型的性能和安全性，甚至导致训练过程崩溃。我们的策略是建立一个“数据金字塔”，对数据进行严格分层，优先使用高质量数据，并对低质量数据进行重度清洗或降权。</li>
-<li><strong>多样性与覆盖度 (Diversity and Coverage)</strong>：模型的泛化能力直接取决于数据来源的多样性。配方必须覆盖多种模态（文本、音频、视频、图像）、多种语言、多种领域（科技、文学、新闻、对话）、多种格式（长文、代码、表格）和多种风格（正式、口语化）。</li>
-<li><strong>能力对齐与数据预算 (Capability Alignment and Data Budgeting)</strong>：特定能力（如代码生成、多语翻译、视频理解）需要对应的数据进行“定向培养”。数据预算的分配过程，就是将训练资源（Token）战略性地投入到我们最看重的模型能力上。</li>
-<li><strong>合规与安全先行 (Compliance and Safety First)</strong>：所有数据来源必须严格遵守版权法、许可协议和隐私规定。在配方设计之初，就必须将 PII（个人身份信息）过滤、毒性内容检测和偏见缓解作为基础要求。</li>
+<li>理解大规模 AI 项目中的关键角色及其职责。</li>
+<li>掌握一个从准备到发布的、以周为单位的实战时间线。</li>
+<li>学会设立 Go/No-Go 决策点，并识别与管理核心风险。</li>
+<li>建立一个清晰的成本与预算模型。</li>
+<li>明确项目的技术依赖与交付标准。</li>
 </ul>
-<h2 id="2-100t-token">2. 100T Token 数据池的顶层设计</h2>
-<p>基于 <code>index.md</code> 中的总体规划，我们将 100T Token 的总预算进行如下分解。这里的 Token 是一个统一概念：文本 Token 来自 Qwen BPE tokenizer，而其他模态的 Token 来自其各自的离散化编码器（后接 RVQ）。</p>
-<h3 id="21">2.1 模态分布</h3>
-<p>下表明确了各模态的 Token 预算及其在数据池中的占比。</p>
-<p>| 模态 (Modality) | Token 预算 (T) | 占比    | 核心目标与说明                                                                                               |</p>
+<h2 id="22">2.2 组织与角色分工</h2>
+<p>一个高效的团队结构是项目成功的基石。在一个多模态大模型预训练项目中，典型的角色分工如下，各角间需要紧密协作，并由一位技术负责人（Tech Lead）或项目经理（PM）进行统筹。</p>
+<p>| 角色 (Role) | 核心职责 (Core Responsibilities) | 关键交付物 (Key Deliverables) |</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: left;">模态 (Modality)</th>
-<th style="text-align: left;">Token 预算 (T)</th>
-<th style="text-align: left;">占比</th>
-<th style="text-align: left;">核心目标与说明</th>
+<th style="text-align: left;">角色 (Role)</th>
+<th style="text-align: left;">核心职责 (Core Responsibilities)</th>
+<th style="text-align: left;">关键交付物 (Key Deliverables)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: left;"><strong>文本 (Text)</strong></td>
-<td style="text-align: left;">94.0</td>
-<td style="text-align: left;">94.0%</td>
-<td style="text-align: left;"><strong>知识与推理的基座</strong>。承载了最密集的结构化与非结构化知识，是其他模态语义对齐的“锚点”。</td>
+<td style="text-align: left;"><strong>数据团队 (Data Team)</strong></td>
+<td style="text-align: left;">数据源发现、合规抓取、清洗、去重、质量分层、版本化管理。</td>
+<td style="text-align: left;">版本化的多模态数据集、数据卡（Data Cards）、数据处理流水线。</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>音频 (Audio)</strong></td>
-<td style="text-align: left;">2.5</td>
-<td style="text-align: left;">2.5%</td>
-<td style="text-align: left;"><strong>听觉理解与语音生成</strong>。覆盖语音、音乐、环境声，重点在于语音内容（播客、演讲），以培养模型的听觉叙事和对话能力。</td>
+<td style="text-align: left;"><strong>离散化团队 (Discretization Team)</strong></td>
+<td style="text-align: left;">训练/微调各模态的 VQ-VAE/RVQ 编码器，定义多模态词表。</td>
+<td style="text-align: left;">各模态的离散化模型（Tokenizer Checkpoints）、数据转换脚本。</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>视频 (Video)</strong></td>
-<td style="text-align: left;">2.5</td>
-<td style="text-align: left;">2.5%</td>
-<td style="text-align: left;"><strong>时空动态理解</strong>。包含视觉、音频和时序信息，是培养模型理解物理世界、事件流程和多模态叙事的关键。</td>
+<td style="text-align: left;"><strong>模型团队 (Model Team)</strong></td>
+<td style="text-align: left;">模型结构设计、实现、超参数调优、训练脚本开发与维护。</td>
+<td style="text-align: left;">模型代码库、配置文件、训练启动与调试脚本。</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>图像 (Image)</strong></td>
-<td style="text-align: left;">1.0</td>
-<td style="text-align: left;">1.0%</td>
-<td style="text-align: left;"><strong>静态视觉理解</strong>。主要以图文对的形式存在，用于建立扎实的视觉概念与文本描述之间的关联。</td>
+<td style="text-align: left;"><strong>基础设施团队 (Infra Team)</strong></td>
+<td style="text-align: left;">GPU 集群搭建与维护、网络拓扑优化、并行计算框架（Megatron）配置、存储系统管理、调度与容错。</td>
+<td style="text-align: left;">稳定、高吞吐的训练平台监控仪表盘（Dashboard）、故障恢复预案（Runbook）。</td>
 </tr>
 <tr>
-<td style="text-align: left;"><strong>合计</strong></td>
-<td style="text-align: left;"><strong>100.0</strong></td>
-<td style="text-align: left;"><strong>100%</strong></td>
-<td style="text-align: left;"></td>
+<td style="text-align: left;"><strong>评测团队 (Evaluation Team)</strong></td>
+<td style="text-align: left;">评测基准选取、评测流水线搭建、定期生成评测报告、监控数据泄漏。</td>
+<td style="text-align: left;">自动化评测框架、模型性能报告、回归测试告警。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>法务与合规团队 (Legal &amp; Compliance)</strong></td>
+<td style="text-align: left;">数据源许可证审查、TOS 遵循、PII/敏感内容策略制定、开源合规。</td>
+<td style="text-align: left;">数据采购与使用指南、合规风险评估报告。</td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>经验法则 (Rule-of-Thumb)</strong></p>
-<p>为什么文本数据占比如此之高（94%）？</p>
+<p><strong>Rule-of-Thumb:</strong></p>
+<ul>
+<li>在项目早期，数据、Infra 和法务团队的工作是瓶颈；项目中后期，模型、离散化和评测团队的压力最大。</li>
+<li>团队之间必须建立清晰的接口人（Point of Contact, PoC）和定期的同步会议（例如，每日站会、每周例会），以避免信息孤岛。</li>
+</ul>
+<h2 id="23-p0-alphabetafreezerelease">2.3 时间线（周粒度）：准备→P0 演示→Alpha→Beta→Freeze→Release</h2>
+<p>一个典型的 10B 级别多模态模型项目，从启动到交付，周期通常在 24 到 40 周之间。以下是一个参考的 40 周时间线，涵盖了从准备到发布的完整流程。</p>
+<p>| 阶段 (Phase) | 时间窗口 (Weeks) | 核心目标 (Key Objectives) |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">阶段 (Phase)</th>
+<th style="text-align: left;">时间窗口 (Weeks)</th>
+<th style="text-align: left;">核心目标 (Key Objectives)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Phase 1: 准备与基建</strong></td>
+<td style="text-align: left;"><strong>W1 - W6</strong></td>
+<td style="text-align: left;">团队组建、算力集群（256x H100）就位与验收、存储规划、初步数据源确定与合规审查。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Phase 2: P0 演示</strong></td>
+<td style="text-align: left;"><strong>W7 - W10</strong></td>
+<td style="text-align: left;"><strong>端到端流程验证</strong>。用一个小模型（~100M）在小数据集（~1B token）上跑通数据处理、离散化、训练、评测全流程。<strong>目标不是效果，而是验证通路</strong>。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Phase 3: Alpha 探索</strong></td>
+<td style="text-align: left;"><strong>W11 - W18</strong></td>
+<td style="text-align: left;"><strong>中等规模训练</strong>。启动 1B 模型的训练，目标处理 1T token。主要任务是验证模型扩展性、数据配方的初步效果，并稳定训练过程。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Phase 4: Beta 全规模训练</strong></td>
+<td style="text-align: left;"><strong>W19 - W32</strong></td>
+<td style="text-align: left;"><strong>核心生产阶段</strong>。启动 10B 模型的训练，目标处理 10T token。此阶段是算力消耗的高峰，重点是监控、容错和维持高吞吐。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Phase 5: Freeze 与评测</strong></td>
+<td style="text-align: left;"><strong>W33 - W36</strong></td>
+<td style="text-align: left;"><strong>模型版本冻结</strong>。停止训练，对 Beta 阶段产出的多个 checkpoints 进行全面、深入的评测，选出最终版本。</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Phase 6: 交付与发布</strong></td>
+<td style="text-align: left;"><strong>W37 - W40</strong></td>
+<td style="text-align: left;"><strong>打包与文档化</strong>。准备交付物（checkpoint、tokenizer、模型卡等），进行可能的量化或蒸馏实验，并向内部或外部发布。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="24-gono-go">2.4 Go/No-Go 门槛与风险清单</h2>
+<p>在每个阶段结束时，必须设立明确的 Go/No-Go 决策点，以避免资源浪费和方向性错误。</p>
+<ul>
+<li><strong>P0 结束时:</strong><ul>
+<li><strong>Go:</strong> 端到端流程无阻塞；损失函数（Loss）稳定下降；集群吞吐（MFU）达到初步预期（如 &gt; 30%）。</li>
+<li><strong>No-Go:</strong> 关键组件（如数据加载、并行通信）存在瓶颈；模型不收敛。</li>
+</ul>
+</li>
+<li><strong>Alpha 结束时:</strong><ul>
+<li><strong>Go:</strong> 1B 模型在关键评测指标上展现出合理的扩展趋势（Scaling Law）；训练过程稳定，未出现频繁的 NaN 或 OOM。</li>
+<li><strong>No-Go:</strong> 模型性能远低于预期；数据配方暴露出严重质量问题。</li>
+</ul>
+</li>
+<li><strong>Beta 启动前:</strong><ul>
+<li><strong>Go:</strong> 所有主要数据集均已处理完毕并入库；Infra 团队确认集群在未来 14 周内具备高可用性。</li>
+<li><strong>No-Go:</strong> 关键数据源获取失败；算力预算无法覆盖全周期。</li>
+</ul>
+</li>
+</ul>
+<p><strong>核心风险清单 (Risk Checklist):</strong></p>
+<ul>
+<li><strong>技术风险:</strong><ul>
+<li>训练过程不稳定（Loss Spikes, NaN）。</li>
+<li>集群硬件故障（GPU/NVLink/NIC 故障）。</li>
+<li>并行计算框架（Megatron）存在未知 Bug。</li>
+<li>数据加载速度跟不上 GPU 计算速度，IO 成为瓶颈。</li>
+</ul>
+</li>
+<li><strong>合规风险:</strong><ul>
+<li>数据源版权不清晰，面临法律诉讼。</li>
+<li>数据集中包含大量未经过滤的 PII 或有毒内容。</li>
+<li>违反服务条款（TOS）或 <code>robots.txt</code> 规定。</li>
+</ul>
+</li>
+<li><strong>成本风险:</strong><ul>
+<li>训练时长超出预期，导致算力预算超支。</li>
+<li>存储成本（特别是视频等大文件）爆炸式增长。</li>
+<li>需要额外的人力进行数据标注或洗。</li>
+</ul>
+</li>
+</ul>
+<h2 id="25">2.5 成本与预算模型</h2>
+<p>预估和控制成本是项目管理的核心。主要成本构成如下：</p>
 <ol>
-<li><strong>信息密度</strong>：文本是人类知识最高效、最浓缩的载体。复杂的科学原理、抽象的哲学思辨、精密的法律条文，都主要以文本形式存在。</li>
-<li><strong>对齐基石</strong>：在当前的自回归框架下，模型通过将其他模态“翻译”成类似文本的离散 Token 序列来学习。一个强大、稳固的文本理解基座，对于有效吸收其他模态信息至关重要。</li>
-<li><strong>成本效益</strong>：文本数据的获取、清洗和存储成本，相对于同等信息量的视频和音频数据，要低几个数量级。</li>
+<li><strong>算力成本 (Compute Cost):</strong><ul>
+<li>这是最大头的开销。估算公式：</li>
+<li><code>总成本 = GPU数量 × 训练时长(小时) × 单卡小时单价</code></li>
+<li>对于 256x H100 集群，训练 10T token，有效吞吐率（MFU）是关键变量。MFU 越高，训练时长越短，成本越低。</li>
+</ul>
+</li>
+<li><strong>存储成本 (Storage Cost):</strong><ul>
+<li><strong>热存储 (SSD/NVMe):</strong> 用于训练时高速读取数据集，成本高。</li>
+<li><strong>冷存储 (HDD/对象存储):</strong> 用于存放原始数据、中间产物和旧的 checkpoints，成本低。</li>
+<li>视频数据是存储大户，需要精细规划分层存储策略。一个 100T token 的原始池，其原始文件大小可能达到数 PB。</li>
+</ul>
+</li>
+<li><strong>带宽成本 (Bandwidth Cost):</strong><ul>
+<li>主要涉及从公网抓取数据到云存储的入站流量，以及可能的跨区域数据同步。</li>
+</ul>
+</li>
+<li><strong>人工成本 (Personnel Cost):</strong><ul>
+<li><code>总成本 = 团队人数 × 平均月薪 × 项目周期(月)</code></li>
+<li>一个 10-15 人的精英团队是比较典型的配置。</li>
+</ul>
+</li>
 </ol>
-</blockquote>
-<h3 id="22">2.2 语言分布</h3>
-<p>语言分布主要针对包含语义语言的 99T Token（文本 + 音频 + 视频）。图像的 1T Token 不计入语言分布，因其视觉概念具有跨语言的普适性。</p>
-<p>| 语言类别         | 目标占比 | 对应 Token 预算 (T) | 主要构成                                   | 战略意义                                     |</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">语言类别</th>
-<th style="text-align: left;">目标占比</th>
-<th style="text-align: left;">对应 Token 预算 (T)</th>
-<th style="text-align: left;">主要构成</th>
-<th style="text-align: left;">战略意义</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>中文 (Chinese)</strong></td>
-<td style="text-align: left;">~36%</td>
-<td style="text-align: left;">~35.6</td>
-<td style="text-align: left;">简体中文为主，覆盖繁体。网页、书籍、百科、社区。</td>
-<td style="text-align: left;">核心市场与文化基础，确保母语能力的深度和广度。</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>英文 (English)</strong></td>
-<td style="text-align: left;">~54%</td>
-<td style="text-align: left;">~53.5</td>
-<td style="text-align: left;">全球互联网主导语言。科技、学术、金融、娱乐。</td>
-<td style="text-align: left;">获取全球最前沿、最广泛的知识，确保科技领先性。</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>其他语种</strong></td>
-<td style="text-align: left;">~10%</td>
-<td style="text-align: left;">~9.9</td>
-<td style="text-align: left;">日/韩/法/德/西/俄/阿 等主要语言。</td>
-<td style="text-align: left;">拓展模型的国际化能力和跨文化理解，服务更广泛用户。</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>合计</strong></td>
-<td style="text-align: left;"><strong>100%</strong></td>
-<td style="text-align: left;"><strong>99.0</strong></td>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"></td>
-</tr>
-</tbody>
-</table>
-<h2 id="3-token">3. 数据预算：从 Token 到存储的换算</h2>
-<p>对于 Infra 工程师而言，将抽象的 Token 预算转化为具体的存储（Petabytes）和处理需求是项目规划的第一步。下表提供了估算依据。</p>
-<p>| 模态     | Token 预算 (T) | Token 化速率 (近似)                                  | 蕴含原始数据规模 (估算) | 原始数据存储 (估算, PB) |</p>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">模态</th>
-<th style="text-align: left;">Token 预算 (T)</th>
-<th style="text-align: left;">Token 化速率 (近似)</th>
-<th style="text-align: left;">蕴含原始数据规模 (估算)</th>
-<th style="text-align: left;">原始数据存储 (估算, PB)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>文本</strong></td>
-<td style="text-align: left;">94.0</td>
-<td style="text-align: left;">~3-4 字节/Token (UTF-8)</td>
-<td style="text-align: left;">~320 PB 纯文本</td>
-<td style="text-align: left;">~0.32</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>音频</strong></td>
-<td style="text-align: left;">2.5</td>
-<td style="text-align: left;">~400 Token/秒 (24kHz, 8xRVQ)</td>
-<td style="text-align: left;">~174 万小时</td>
-<td style="text-align: left;">~5.5 (FLAC 压缩)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>视频</strong></td>
-<td style="text-align: left;">2.5</td>
-<td style="text-align: left;">~1536 Token/秒 (6 fps, 16x16 patch, 256 token/frame)</td>
-<td style="text-align: left;">~45 万小时</td>
-<td style="text-align: left;">~18.0 (H.264 压缩)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>图像</strong></td>
-<td style="text-align: left;">1.0</td>
-<td style="text-align: left;">~256 Token/图</td>
-<td style="text-align: left;">~39 亿张图片</td>
-<td style="text-align: left;">~3.9 (JPEG 压缩 @1MB/图)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>总计</strong></td>
-<td style="text-align: left;"><strong>100.0</strong></td>
-<td style="text-align: left;">-</td>
-<td style="text-align: left;">-</td>
-<td style="text-align: left;"><strong>~27.7 PB</strong></td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong>经验法则 (Rule-of-Thumb)</strong></p>
-<p>存储规划时，务必考虑 <strong>3-5 倍的存储开销</strong>。除了原始数据，你还需要存储：</p>
-<ol>
-<li><strong>中间版本</strong>：清洗、去重、格式转换后的数据。</li>
-<li><strong>Token 化数据</strong>：这是训练时直接读取的数据，体积可能比原始数据更大（特别是对于音视频）。</li>
-<li><strong>元数据 (Metadata)</strong>：来源、许可、质量分数、哈希值、PII 标签等，对于数据治理和可追溯性至关重要。
-因此，一个 28 PB 的原始数据池，最终可能需要 <strong>80-140 PB</strong> 的总存储空间。</li>
-</ol>
-</blockquote>
-<h2 id="4">4. 数据分层与质量金字塔</h2>
-<p>我们不应平等地对待所有数据。引入“数据金字塔”模型，将数据池划分为不同质量等级，以便在后续的采样和训练中实施更精细的策略。</p>
-<div class="codehilite"><pre><span></span><code>      /▲\      &lt;-- 顶层 (Apex / Gold): ~5% Token
-     / ▲▲ \       - 教科书、学术论文、专业书籍、高质量百科
-    / ▲▲▲▲ \      - 经过专家审核、事实性强、逻辑清晰
-   / ▲▲▲▲▲▲ \     - 训练前期用于奠定模型核心知识与推理能力
-  /----------\
- / ▲▲▲▲▲▲▲▲▲▲ \   &lt;-- 中层 (Middle / Silver): ~35% Token
-/ ▲▲▲▲▲▲▲▲▲▲▲▲ \    - 高质量网页 (RefinedWeb-like)、技术博客、StackExchange
-/ ▲▲▲▲▲▲▲▲▲▲▲▲▲▲ \   - 经过严格的启发式规则和模型过滤，信噪比较高
-/------------------\
-/ ▲...      ...▲▲ \ &lt;-- 底层 (Base / Bronze): ~60% Token
-/ ▲▲...    ...▲▲▲ \   - 广泛的 Common Crawl 数据、论坛、社交媒体长文
-/ ▲▲▲...  ...▲▲▲▲ \     - 提供了巨大的多样性和长尾知识，但噪声多
-/ ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ \   - 需要最强的清洗和去毒、去重、去 PII 策略
----------------------
+<h2 id="26">2.6 依赖矩阵与供应链</h2>
+<p>项目的成功依赖于一个稳定且高性能的技术栈。各个组件之间存在紧密的依赖关系。</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">+-----------------------+</span><span class="c">      </span><span class="nb">+-------------------+</span><span class="c">      </span><span class="nb">+-----------------+</span>
+<span class="c">|   Application Layer   | </span><span class="nb">---</span><span class="nv">&gt;</span><span class="c"> |  Framework Layer  | </span><span class="nb">---</span><span class="nv">&gt;</span><span class="c"> |  Hardware Layer |</span>
+<span class="c">| (模型代码</span><span class="nt">,</span><span class="c"> 训练脚本)    |      | (Megatron</span><span class="nt">,</span><span class="c"> PyTorch) |      | (H100 GPU</span><span class="nt">,</span><span class="c"> CPU) |</span>
+<span class="nb">+-----------------------+</span><span class="c">      </span><span class="nb">+-------------------+</span><span class="c">      </span><span class="nb">+-----------------+</span>
+<span class="c">        ^                            ^                            ^</span>
+<span class="c">        |                            |                            |</span>
+<span class="nb">+-----------------------+</span><span class="c">      </span><span class="nb">+-------------------+</span><span class="c">      </span><span class="nb">+-----------------+</span>
+<span class="c">|  Data Pipeline Layer  |      |   Parallel Libs   |      |   Interconnect  |</span>
+<span class="c">| (WebDataset</span><span class="nt">,</span><span class="c"> ETL)     |      |  (NCCL</span><span class="nt">,</span><span class="c"> MPI)      |      | (NVLink</span><span class="nt">,</span><span class="c"> IB/RoCE) |</span>
+<span class="nb">+-----------------------+</span><span class="c">      </span><span class="nb">+-------------------+</span><span class="c">      </span><span class="nb">+-----------------+</span>
+<span class="c">        ^                            ^                            ^</span>
+<span class="c">        |                            |                            |</span>
+<span class="nb">+-----------------------+</span><span class="c">      </span><span class="nb">+-------------------+</span><span class="c">      </span><span class="nb">+-----------------+</span>
+<span class="c">|    Storage Layer      |      |   OS &amp; Drivers    |      |  Data Center    |</span>
+<span class="c">| (NFS</span><span class="nt">,</span><span class="c"> S3</span><span class="nt">,</span><span class="c"> Lustre)     |      | (CUDA</span><span class="nt">,</span><span class="c"> Kernel)    |      | (Power</span><span class="nt">,</span><span class="c"> Cooling)|</span>
+<span class="nb">+-----------------------+</span><span class="c">      </span><span class="nb">+-------------------+</span><span class="c">      </span><span class="nb">+-----------------+</span>
 </code></pre></div>
 
-<p><strong>应用</strong>：在 <code>chapter11</code> 讲述的动态采样中，我们可以为不同层级的数据赋予同的采样权重。例如，在训练初期，<code>Gold</code> 层数据的采样率可以被调高（比如权重设为 3.0），以快速构建模型的基础能力；而在训练后期，可以适当提高 <code>Bronze</code> 层数据的采样率，以增强模型的鲁棒性和知识广度。</p>
-<h2 id="5">5. 动态采样与退火策略</h2>
-<p>100T 的数据池不会在一次训练中全部用完。对于单次 10T Token 的训练轮次，我们需要设计一个<strong>动态采样</strong>策略，即数据配方在训练的不同阶段会有所侧重。这通常被称为<strong>课程学习 (Curriculum Learning)</strong> 或<strong>退火 (Annealing)</strong>。</p>
-<p>一个典型的采样概率公式可以表示为：
-$$
-P(D_i, t) = \frac{w_i \cdot f_i(t)}{\sum_{j=1}^{N} w_j \cdot f_j(t)}
-$$
-其中：</p>
+<p><strong>关键供应链依赖:</strong></p>
 <ul>
-<li>$P(D_i, t)$ 是在训练步数 $t$ 时，从数据源 $D_i$ 采样的概率。</li>
-<li>$w_i$ 是数据源 $D_i$ 的基础采样权重（例如，基于其质量层级）。</li>
-<li>$f_i(t)$ 是一个关于训练步数的退火函数，用于动态调整权重。它可以是分段函数指数衰减函数等。</li>
-<li>$N$ 是数据源的总数。</li>
+<li><strong>H100 GPUs:</strong> 核心计算单元。供应情况、交付周期是项目启动的先决条件。</li>
+<li><strong>NVLink &amp; NVSwitch:</strong> GPU 间高速互联，对张量并行（TP）和流水线并行（PP）的性能至关重要。</li>
+<li><strong>InfiniBand (IB) / RoCE:</strong> 节点间通信网络，决定了数据并行（DP）和ZeRO等优化策略的效率。</li>
+<li><strong>高性能并行文件系统:</strong> 如 Lustre 或 BeeGFS，确保数据加载不会成为瓶颈。</li>
 </ul>
-<p><strong>示例三阶段退火策略 (应用于 10T 训练轮):</strong></p>
+<h2 id="27">2.7 交付物与里程碑验收标准</h2>
+<p>每个里程碑都要有明确、可量化的验收标准。</p>
+<p>| 里程碑 (Milestone) | 交付物 (Deliverables) | 验收标准 (Acceptance Criteria) |</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">里程碑 (Milestone)</th>
+<th style="text-align: left;">交付物 (Deliverables)</th>
+<th style="text-align: left;">验收标准 (Acceptance Criteria)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>P0 演示</strong></td>
+<td style="text-align: left;">1. 运行日志和损失曲线<br>2. 一个微型 checkpoint<br>3. 端到端流程文档</td>
+<td style="text-align: left;">1. Loss 稳定下降超过 12 小时<br>2. 集群 MFU &gt; 30%<br>3. 评测流程可自动化运行</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Alpha 探索</strong></td>
+<td style="text-align: left;">1. 1B 模型 checkpoints<br>2. 初步评测报告<br>3. 训练稳定性报告</td>
+<td style="text-align: left;">1. 在核心 VL 指标上超越同类开源模型<br>2. 连续 72 小时无人工干预稳定运行<br>3. 数据流水线吞吐满足 10B 模型需求</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Beta 全规模训练</strong></td>
+<td style="text-align: left;">1. 10B 模型 checkpoints (多个)<br>2. 详细的消融实验记录<br>3. 资源消耗报告</td>
+<td style="text-align: left;">1. 完成 10T token 的训练<br>2. 最终 Loss 达到预设目标<br>3. MFU 在整个训练期间维持在 50% 以上</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>最终发布</strong></td>
+<td style="text-align: left;">1. 最终版 10B checkpoint<br>2. 多模态 Tokenizer<br>3. 模型卡与数据卡<br>4. 推理示例代码</td>
+<td style="text-align: left;">1. 所有评测指标通最终审核<br>2. 泄漏检测确认评测集干净<br>3. 合规审查通过</td>
+</tr>
+</tbody>
+</table>
+<h2 id="28">2.8 本章小结</h2>
+<p>本章强调了将多模态大模型预训练视为一个严肃的工程项目的重要性。我们讨论了成功所必需的组织结构、角色分工，并提供了一个贯穿始终的、分阶段的实战时间线。通过设立明确的 Go/No-Go 门槛、管理技术与非技术风险、建立清晰的成本模型，以及定义可量化的交付标准，我们可以极大地提高项目成功的概率，避免在长达数月的训练周期中迷失方向。</p>
+<h2 id="29-gotchas">2.9 常见陷阱与错误 (Gotchas)</h2>
 <ol>
-<li><strong>阶段一 (0-3T Token, “奠基期”)</strong>:<ul>
-<li><strong>目标</strong>: 建立稳固的语言模型基础和核心知识。</li>
-<li><strong>策略</strong>: <strong>提高文本数据，特别是 <code>Gold</code> 层文本的采样权重</strong>。例如，文本采样率提升至 85%，音视频采样率相应降低。</li>
-</ul>
-</li>
-<li><strong>阶段二 (3-7T Token, “融合期”)</strong>:<ul>
-<li><strong>目标</strong>: 强化多模态对齐和跨模态理解能力。</li>
-<li><strong>策略</strong>: <strong>恢复到基准配方或略微提高多模态数据权重</strong>。例如，文本 75%，音频 10%，视频 10%，图像 5%。</li>
-</ul>
-</li>
-<li><strong>阶段三 (7-10T Token, “精化期”)</strong>:<ul>
-<li><strong>目标</strong>: 提升对长上下文、复杂指令和特定技能的掌握。</li>
-<li><strong>策略</strong>: <strong>增加长序列数据（长文本、长音视频）和指令微调类数据的权重</strong>，同时可能轻微降低通用网页数据的权重。</li>
-</ul>
-</li>
-</ol>
-<p>这种动态策略使得训练资源在不同阶段能最有效地利用。</p>
-<h2 id="6">6. 数据仪表盘：可观测性是关键</h2>
-<p>设计再好的配方，如果无法监控和度量，也只是纸上谈兵。必须建立一个全面的数据仪表盘来追踪数据池和采样过程中的关键指标。</p>
-<p><strong>需要监控的关键指标 (KPIs)</strong>:</p>
-<ul>
-<li><strong>数据池维度</strong>:<ul>
-<li>各模态/语言/领域的 Token 总量。</li>
-<li>数据质量分布：<code>Gold/Silver/Bronze</code> 各层级的 Token 数量。</li>
-<li>去重率：精确去重和近似去重的比例。</li>
-<li>安全指标：PII/毒性/仇恨言论等内容的检出率和浓度。</li>
-<li>数据来源与许可分布：确保合规性可追溯。</li>
-</ul>
-</li>
-<li><strong>训练采样维度 (实时)</strong>:<ul>
-<li>实时采样混合比例：当前 batch 中各数据源的实际 Token 占比是否符合预设的动态策略。</li>
-<li>序列长度分布：确保 packing 效率和长下文训练目标的达成。</li>
-<li>Loss 尖峰与数据源关联分析：当训练出现不稳时，能快速定位到可能的问题数据源。</li>
-</ul>
-</li>
-</ul>
-<p>这个表盘是数据科学家和 Infra 工程师之间沟通的桥梁，也是整个预训练项目稳定运行的“驾驶舱”。</p>
-<h2 id="_2">本章小结</h2>
-<ul>
-<li><strong>数据配方是战略蓝图</strong>: 它决定了模型的“基因”，其核心原则是质量优先、多样性、能力对齐和合规安全。</li>
-<li><strong>预算量化是工程基础</strong>: 我们将 100T Token 的宏大目标分解到每个模态和语言，并进一步换算为 PB 级的实际存储需求，为资源规划提供了坚实依据。</li>
-<li><strong>质量分层是精细化管理的核心</strong>: 通过构建“数据金字塔”，我们可以实施更高级的采样策略，最大化高质量数据的价值。</li>
-<li><strong>动态采样是效率倍增器</strong>: 采用退火策略，在训练的不同阶段动态调整数据配方，可以更高效地构建模型能力。</li>
-<li><strong>可观测性是成败关键</strong>: 建立数据仪表盘，对数据池和采样过程进行持续监控，是保障项目顺利进行和快速排错的必要条件。</li>
-</ul>
-<h2 id="gotchas">常见陷阱与错误 (Gotchas)</h2>
-<ol>
-<li><strong>“越多越好”的误区 (The "More is Always Better" Fallacy)</strong>: 盲目追求 Token 数量而忽视质量是灾难性的。一个混入了 10% 严重噪声数据的 10T 数据集，其效果可能远不如一个经过精细清洗的 8T 数据集。低质数据会拉低模型整体的逻辑和事实性。</li>
-<li><strong>忽视 Token 化成本与存储 (Ignoring Tokenization Costs)</strong>: 尤其是视频和音频，从原始文件到离散 Token 的转换过程是计算密集型的，需要单独规划算力。Token 化后的数据通常无法被高效压缩，其存储体积可能远超你的预期，必须在项目早期就进行精确核算。</li>
-<li><strong>静态配方一成不变 (Static Recipe Rigidity)</strong>: 市场和研究进展日新月异。在长达数月的训练周期中，你可能会发现模型在某些方面的能力不足。一个好的数据配方设计应该允许在中途进行微调（例如，通过调整采样权重），以应对评测中发现的问题。</li>
-<li><strong>语言和文化的“中心化”偏 (Ethnocentric Bias)</strong>: 即使我们设计了 10% 的“其他语种”，如果这些数据仅来自少数几个发达国家，模型仍然会存在巨大的文化偏见。必须有意识地去搜集和平衡代表不同文化区域的数据，即使它们的绝对数量很少。</li>
-<li><strong>“不可能三角”：规模、质量、合规 (The "Impossible Triangle": Scale, Quality, Compliance)</strong>: 在有限的资源和时间内，同时达到极大规模、极高质量和 100% 合规是极其困难的。项目管理者必须清醒地认识到这三者之间的权衡。例如，为了确保完全合规，可能需要放弃一些有价值但许可模糊的数据源，从而影响规模或多样性。早期明确优先级至关重要。</li>
+<li><strong>技术乐观主义 (Unchecked Technical Optimism):</strong> 低估基础设施搭建、调试和稳定化的时间。<strong>调试并行计算和硬件问题可能比写模型代码花费更多时间</strong>。</li>
+<li><strong>“先收集再思考”的数据策略 (Collect First, Think Later):</strong> 在没有清晰的数据配方和合规审查前，盲目抓取海量数据，导致后期数据清洗和合规成本激增，甚数据完全不可用。</li>
+<li><strong>跳过 P0 验证 (Skipping the P0 Demo):</strong> 直接上手大规模训练，结果在训练数周后才发现数据加载或模型代码中的基础性错误，造成巨大的算力浪费。</li>
+<li><strong>角色职责模糊 (Ambiguous Roles):</strong> 比如，数据质量问题究竟是数据团队的责任，还是模型团队在使用时发现并修复？<strong>明确的责任边界（DRI - Directly Responsible Individual）</strong>至关重要。</li>
+<li><strong>忽视监控与告警 (Neglecting Observability):</strong> 在没有充分监控的情况下开始长周期训练，等同于“蒙眼狂奔”。当问题（如 Loss 突变、节点掉线）发生时，无法及时发现和定位。</li>
+<li><strong>预算审批与实际消耗脱节 (Budget vs. Reality Disconnect):</strong> 项目预算一次性审批后，缺乏持续的成本跟踪机制。当训练因故延长时，容易陷入算力不足的窘境。</li>
 </ol>
             </article>
             
-            <nav class="page-nav"><a href="chapter2.html" class="nav-link prev">← 第二章：项目管理与里程碑——从计划到交付的路线图</a><a href="chapter4.html" class="nav-link next">第四章：文本数据——抓取、清洗、去重与质量分层 →</a></nav>
+            <nav class="page-nav"><a href="chapter2.html" class="nav-link prev">← chapter2.md — 项目管理与里程碑</a><a href="chapter4.html" class="nav-link next">第四章：文本数据——抓取、清洗、去重与质量分层 →</a></nav>
         </main>
     </div>
 </body>

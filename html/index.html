@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="./">
-    <title>多模态自回归大模型预训练（1B–30B）——公开教程（Index）</title>
+    <title>index.md（导读与目录）</title>
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/highlight.css">
     <script src="assets/script.js" defer></script>
@@ -42,607 +42,246 @@
                 <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
             </div>
             <div id="tree-container">
-                <ul class="nav-list"><li class="active"><a href="index.html">多模态自回归大模型预训练（1B–30B）——公开教程（Index）</a></li><li class=""><a href="chapter1.html">第一章：总览与技术路线</a></li><li class=""><a href="chapter2.html">第二章：项目管理与里程碑——从计划到交付的路线图</a></li><li class=""><a href="chapter3.html">第三章：数据配方设计——构建 100T Token 的多模态数据池</a></li><li class=""><a href="chapter4.html">第四章：文本数据——抓取、清洗、去重与质量分层</a></li><li class=""><a href="chapter5.html">第五章：音频数据——合规抓取、质量过滤与 RVQ 离散化</a></li><li class=""><a href="chapter6.html">chapter6.md — 视频数据：合规抓取、切片、时空离散化</a></li><li class=""><a href="chapter7.html">第七章：图像数据——采集、质量打分与离散化</a></li><li class=""><a href="chapter8.html">第八章：Tokenizer 与词表：多模扩词、特殊符与对齐标注</a></li><li class=""><a href="CLAUDE.html">Untitled</a></li></ul>
+                <ul class="nav-list"><li class="active"><a href="index.html">index.md（导读与目录）</a></li><li class=""><a href="chapter1.html">Chapter 1: 总览与技术路线</a></li><li class=""><a href="chapter2.html">chapter2.md — 项目管理与里程碑</a></li><li class=""><a href="chapter3.html">chapter2.md — 项目管理与里程碑</a></li><li class=""><a href="chapter4.html">第四章：文本数据——抓取、清洗、去重与质量分层</a></li><li class=""><a href="chapter5.html">第五章：音频数据——合规抓取、质量过滤与 RVQ 离散化</a></li><li class=""><a href="chapter6.html">chapter6.md — 视频数据：合规抓取、切片、时空离散化</a></li><li class=""><a href="chapter7.html">第七章：图像数据——采集、质量打分与离散化</a></li><li class=""><a href="chapter8.html">第八章：Tokenizer 与词表：多模扩词、特殊符与对齐标注</a></li><li class=""><a href="CLAUDE.html">Untitled</a></li></ul>
             </div>
         </nav>
         
         <main class="content">
             <article>
-                <h1 id="1b30bindex">多模态自回归大模型预训练（1B–30B）——公开教程（Index）</h1>
-<blockquote>
-<p><strong>读者对象</strong>：AI Scientist 与中型企业 Infra/平台工程师
-<strong>交付物</strong>：生产级的<strong>多模态自回归 Transformer</strong>（类 Qwen、早期融合、各模态离散化 token）<strong>预训练 checkpoint</strong> + 完整工程化流水线与文档
-<strong>训练底座</strong>：Megatron（Megatron-Core/Megatron-LM），<strong>256×H100 80GB</strong>，<strong>一次训练以过完 10T token 为准</strong>
-<strong>数据侧目标</strong>：自采/开源共 <strong>100T token 池</strong>（<strong>中英 90%</strong>、<strong>其他语种 10%</strong>；token 细分到具体数据集；数据治理为重中之重）</p>
-</blockquote>
-<hr />
-<h2 id="_1">本书结构</h2>
-<blockquote>
-<p>本教程由 <code>index.md + chapter1.md + chapter2.md + ...</code> 组成。每章均提供工程化 checklist、脚本/代码、关键表格与可复现配置。建议按顺序阅读与实施。</p>
-</blockquote>
-<ol>
-<li><strong>chapter1.md — 总览与技术路线</strong></li>
-</ol>
+                <h1 id="indexmd">index.md（导读与目录）</h1>
 <ul>
-<li>目标能力、范围边界、关键设计权衡（早期融合 vs. 后期融合、dense vs. MoE 等）</li>
-<li>统一 token 间与多模态对齐思想（离散化 + 位置/时间对齐）</li>
-<li>端到端系统图（数据→治理→离散化→混采→训练→评测→交付）</li>
-</ul>
-<ol start="2">
-<li><strong>chapter2.md — 项目管理与里程碑</strong></li>
-</ol>
-<ul>
-<li>贯穿 24–40 周的<strong>总体时间线</strong>（人员、风险、Go/No-Go 门槛）</li>
-<li>依赖矩阵（数据/算力/合规/监控）与灰度推进策略</li>
-</ul>
-<ol start="3">
-<li><strong>chapter3.md — 数据配方设计（100T token 池）</strong></li>
-</ol>
-<ul>
-<li>语言、模态与域的<strong>目标配比</strong>与<strong>采样/退火</strong>策略</li>
-<li><strong>数据指标仪表盘</strong>与“数据预算—token 化—训练吞吐”的对应关系</li>
-</ul>
-<ol start="4">
-<li><strong>chapter4.md — 文本数据：抓取、清洗、去重与质量分层</strong></li>
-</ol>
-<ul>
-<li>自研/复用开源清洗包（质量模型、毒性/PII/版权检测）</li>
-<li>高效去重（Exact + NearDup：MinHash/SimHash、跨模态近重）</li>
-</ul>
-<ol start="5">
-<li><strong>chapter5.md — 音频数据：合规抓取、ASR 对齐、RVQ 离散化</strong></li>
-</ol>
-<ul>
-<li>CC 许可/自有授权的播客/演讲/采访；采样率、静音/噪声过滤</li>
-<li>Encodec/音频 VQ-VAE + <strong>多级 RVQ</strong> 的离散化与码率控制</li>
-</ul>
-<ol start="6">
-<li><strong>chapter6.md — 视频数据：合规抓取、切片、时空离散化</strong></li>
-</ol>
-<ul>
-<li>短/长视频分路；镜头切分、OCR/字幕抽取与质量打分</li>
-<li>视频 VQ（帧-块/Tubelet）+ RVQ 的离散 token 生成与帧率策略</li>
-</ul>
-<ol start="7">
-<li><strong>chapter7.md — 图像数据：采集、质量打分与离散化</strong></li>
-</ol>
-<ul>
-<li>ALT/TEXT 配对、审美/文本相关性打分</li>
-<li>dVAE/VQGAN/VQ-VAE 离散化（典型 16×16 latent → 256 token/图）</li>
-</ul>
-<ol start="8">
-<li><strong>chapter8.md — Tokenizer 与词表：多模扩词、特殊符与对齐标注</strong></li>
-</ol>
-<ul>
-<li><strong>文本沿用 Qwen tokenizer</strong>，多模态扩展符（<img>, <aud>, <vid>, <seg>…）</li>
-<li>连续特征编码器后接 <strong>RVQ</strong>，统一成<strong>离散 token</strong>；时间/空间位置编码设计</li>
-</ul>
-<ol start="9">
-<li><strong>chapter9.md — 模型结构与超参数（1B/7B/14B/30B）</strong></li>
-</ol>
-<ul>
-<li>类 Qwen 的<strong>dense Decoder-only</strong> 架构、早期融合输入拼接</li>
-<li>长上下文（8k/16k）与 RoPE/旋转位置编码的多模态对齐</li>
-</ul>
-<ol start="10">
-<li>
-<p><strong>chapter10.md — 训练基础施（Megatron @ 256×H100）</strong></p>
-<ul>
-<li>并行切分（TP/PP/DP/SP/CP）与推荐组合；ZeRO/Sharded Optimizer</li>
-<li>Mixed Precision（BF16/FP8-TE）、FlashAttention、流水线调度与吞吐优化</li>
-</ul>
-</li>
-<li>
-<p><strong>chapter11.md — 数据混采与课程策略</strong></p>
-<ul>
-<li>10T token 单轮训练的<strong>模态/语言/域</strong>采样曲线</li>
-<li>长序列 Packing、跨模态拼接、PAD/掩码规范</li>
-</ul>
-</li>
-<li>
-<p><strong>chapter12.md — 监控与可观测性</strong></p>
-<ul>
-<li>训练/数据治理/离散化流水线的指标与报警；断点续训与灾备</li>
-</ul>
-</li>
-<li>
-<p><strong>chapter13.md — 评测体系</strong></p>
-<ul>
-<li><strong>Text/Audio/Video 的自回归 Perplexity</strong>与<strong>Vision-Language</strong>指标（检索/描述/问答）</li>
-<li>评测集治理、泄漏检测、统计显著性与回归准则</li>
-</ul>
-</li>
-<li>
-<p><strong>chapter14.md — 安全与合规</strong></p>
-<ul>
-<li>版权/许可、TOS/robots.txt、PII/敏感内容、地方法规</li>
-<li>红队与风险分级（数据→模型→发布）</li>
-</ul>
-</li>
-<li>
-<p><strong>chapter15.md — 交付与落地</strong></p>
-<ul>
-<li>Checkpoint/Tokenizer/离散器版本化与打包；推理样例与缩蒸馏路线</li>
-</ul>
-</li>
-<li>
-<p><strong>appendixA.md — 计算与容量估算</strong>（公式与算例）</p>
-</li>
-<li>
-<p><strong>appendixB.md — 工具链与脚手架</strong>（yt-dlp*/API、爬虫、ETL、Megatron 配置模板）</p>
-</li>
-<li>
-<p><strong>appendixC.md — 常见故障与排障</strong></p>
-</li>
-</ol>
-<blockquote>
-<ul>
-<li><strong>重要合规提示</strong>：仅抓取/下载<strong>具备明确开放许可</strong>的内容（例如 CC-BY/CC0 等），严格遵守各网站/平台的使用条款与 robots.txt；<strong>切勿</strong>绕过 DRM、付费墙或技术保护措施。本书仅提供合规的工程方法与模板，读者须自担合规审查责任。</li>
-</ul>
-</blockquote>
-<hr />
-<h2 id="_2">一页式项目概览</h2>
-<h3 id="10t-token">模型与训练（单轮 10T token）</h3>
-<p>| 参数规模    | 推荐并行 (DP×TP×PP) |    上下文 | 优化器                |    估算训练时长<em> | 估算 GPU·Day</em> |</p>
-<table>
-<thead>
-<tr>
-<th>参数规模</th>
-<th style="text-align: right;">推荐并行 (DP×TP×PP)</th>
-<th style="text-align: right;">上下文</th>
-<th>优化器</th>
-<th style="text-align: right;">估算训练时长*</th>
-<th style="text-align: right;">估算 GPU·Day*</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>1B</strong></td>
-<td style="text-align: right;">64×2×2</td>
-<td style="text-align: right;">8k</td>
-<td>AdamW（BF16/FP8-TE）</td>
-<td style="text-align: right;"><strong>~7.7 天</strong></td>
-<td style="text-align: right;">~1,975</td>
-</tr>
-<tr>
-<td><strong>7B</strong></td>
-<td style="text-align: right;">16×8×2</td>
-<td style="text-align: right;">8k/16k</td>
-<td>同上</td>
-<td style="text-align: right;"><strong>~54 天</strong></td>
-<td style="text-align: right;">~13,827</td>
-</tr>
-<tr>
-<td><strong>14B</strong></td>
-<td style="text-align: right;">8×8×4</td>
-<td style="text-align: right;">8k/16k</td>
-<td>同上</td>
-<td style="text-align: right;"><strong>~108 天</strong></td>
-<td style="text-align: right;">~27,654</td>
-</tr>
-<tr>
-<td><strong>30B</strong></td>
-<td style="text-align: right;">4×16×4</td>
-<td style="text-align: right;">8k/16k</td>
-<td>同上</td>
-<td style="text-align: right;"><strong>~231 天</strong></td>
-<td style="text-align: right;">~59,259</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>假设 256×H100 80GB、有效吞吐 ~<strong>90 PFLOPS</strong>（含通信/内存开销），训练 FLOPs 近似 <strong>6×参数×token</strong>。仅作预算与排期参考，实际取决于实现与利用率。</li>
+<li>0.1 本书定位与读者画像（AI Scientist / 中型企业 Infra 工程师）</li>
+<li>0.2 技术范围与交付物（多模自回归、大规模预训练 checkpoint）</li>
+<li>0.3 全局系统图（数据→治理→离散化→混采→训练→评测→交付）</li>
+<li>0.4 两档生产方案概览：<strong>1B</strong> 与 <strong>10B</strong>（算力、成本、时长、风险）</li>
+<li>0.5 贯穿式时间线与里程碑（24–40 周总览）</li>
+<li>0.6 术语、符号与记号约定（含多模 token 记号）</li>
+<li>0.7 如何使用本书与复现清单</li>
+<li>0.8 本章小结</li>
+<li>0.9 常见陷阱与错误（Gotchas）</li>
 </ul>
 <hr />
-<h2 id="100t-token">100T Token 数据池（自采 + 开源清洗包复用）</h2>
-<blockquote>
-<p><strong>口径</strong>：音频/视频/图像经编码器后<strong>RVQ 离散化</strong>为 token；图像 token 语言无关，<strong>语言占比（中英 90%、其他 10%）按“有语义语言的 token”（文本+语音+视频）计算。</strong>
-<strong>10T 训练轮次</strong>从该 100T 池<strong>按配方采样</strong>，并非一次性完整消耗。</p>
-</blockquote>
-<h3 id="1">1）模态级总览</h3>
-<p>| 模态     |   Token 预算 | 说明（离散化与规模）                                                       |</p>
-<table>
-<thead>
-<tr>
-<th>模态</th>
-<th style="text-align: right;">Token 预算</th>
-<th>说明（离散化与规模）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>文本</strong></td>
-<td style="text-align: right;"><strong>94.0T</strong></td>
-<td>Qwen tokenizer；多域/多语；高质量优先分层采样</td>
-</tr>
-<tr>
-<td><strong>音频</strong></td>
-<td style="text-align: right;"><strong>2.5T</strong></td>
-<td>24 kHz；<strong>8×RVQ</strong>，约 <strong>~400 token/s</strong>；以 CC 语音/播客/演讲为主</td>
-</tr>
-<tr>
-<td><strong>视频</strong></td>
-<td style="text-align: right;"><strong>2.5T</strong></td>
-<td>帧 latent（~<strong>256 token/帧</strong>）× <strong>6 fps ≈ 1536 token/s</strong>；教育/讲解/纪录片优先</td>
-</tr>
-<tr>
-<td><strong>图像</strong></td>
-<td style="text-align: right;"><strong>1.0T</strong></td>
-<td>dVAE/VQ-VAE，约 <strong>256 token/图</strong>；配对/无配对混合</td>
-</tr>
-<tr>
-<td><strong>合计</strong></td>
-<td style="text-align: right;"><strong>100.0T</strong></td>
-<td>语言占比按“文本+音频+视频=99T”口径执行</td>
-</tr>
-</tbody>
-</table>
-<p><strong>语言配比（面向 99T 语言相关 token）：</strong></p>
+<h1 id="chapter1md">chapter1.md — 总览与技术路线</h1>
 <ul>
-<li><strong>中文 + 英文：90%（约 89.1T）</strong> → 中文 ~40%、英文 ~50%（可微调为 45/45/10）</li>
-<li><strong>其他语种：10%（约 9.9T）</strong> → 多语覆盖（西/法/德/葡/意/阿/印地/日/韩/俄…）</li>
+<li>1.1 开篇与学习目标</li>
+<li>1.2 任务定义与边界（自回归、多模态、早期融合）</li>
+<li>1.3 架构路线比较：早期融合 vs 后期融合；Dense vs MoE</li>
+<li>1.4 统一离散化视角：文本/图像/音频/视频→离散 token</li>
+<li>1.5 训练目标与损失函数（NLL/CE、可选辅助任务）</li>
+<li>1.6 规模分档：1B / 10B /（参考）30B 的工程差异</li>
+<li>1.7 端到端数据流与控制面（ASCII 系统图）</li>
+<li>1.8 经验法则（Rule-of-Thumb）与容量预估速表</li>
+<li>1.9 本章小结</li>
+<li>1.10 常见陷阱与错误</li>
 </ul>
-<h3 id="2-940t">2）文本数据集细分（共 94.0T）</h3>
-<p>| 数据集（示例/来源类型）                         | 语言         | Token（T） | 说                           |</p>
-<table>
-<thead>
-<tr>
-<th>数据集（示例/来源类型）</th>
-<th>语言</th>
-<th style="text-align: right;">Token（T）</th>
-<th>说</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>RefinedWeb-EN（自建 + 复用开源清洗包）</strong></td>
-<td>EN</td>
-<td style="text-align: right;"><strong>34.5</strong></td>
-<td>通用英文网页（去重/质量打分/毒性与版权过滤）</td>
-</tr>
-<tr>
-<td><strong>RefinedWeb-ZH（自建 + 复用开源清洗包）</strong></td>
-<td>ZH</td>
-<td style="text-align: right;"><strong>28.5</strong></td>
-<td>通用中文网页（含百科/社区长文/技术文档）</td>
-</tr>
-<tr>
-<td><strong>RefinedWeb-XX（多语，非中英）</strong></td>
-<td>多语</td>
-<td style="text-align: right;"><strong>8.9</strong></td>
-<td>CCNet/FineWeb/Dolma 等多语切片再治理</td>
-</tr>
-<tr>
-<td><strong>Wikipedia/Wikibooks/Wiktionary</strong></td>
-<td>EN/ZH/多语</td>
-<td style="text-align: right;"><strong>1.0</strong></td>
-<td>去重+结构化清洗；知识图谱字段剥离</td>
-</tr>
-<tr>
-<td><strong>Books（Gutenberg 等公共领域 + 合规中文书籍）</strong></td>
-<td>EN/ZH/少量多语</td>
-<td style="text-align: right;"><strong>2.5</strong></td>
-<td>章节/目录抽取；版权严格核验</td>
-</tr>
-<tr>
-<td><strong>ArXiv + PubMed 等开放论文/摘要</strong></td>
-<td>以 EN 为主</td>
-<td style="text-align: right;"><strong>7.0</strong></td>
-<td>版式解析、公式处理、引用去噪</td>
-</tr>
-<tr>
-<td><strong>News（合源汇总）</strong></td>
-<td>EN/ZH</td>
-<td style="text-align: right;"><strong>5.5</strong></td>
-<td>时效性分层；去聚合/去机器翻译痕迹</td>
-</tr>
-<tr>
-<td><strong>Q&amp;A/论坛（StackExchange 等 + 合规中文社区）</strong></td>
-<td>EN/ZH/多语</td>
-<td style="text-align: right;"><strong>4.0</strong></td>
-<td>Markdown/代码块保留策略；毒性过滤</td>
-</tr>
-<tr>
-<td><strong>Gov/Legal（政府/司法/标准）</strong></td>
-<td>多语</td>
-<td style="text-align: right;"><strong>2.1</strong></td>
-<td>许可与引用规范严格校验</td>
-</tr>
-<tr>
-<td><strong>合计</strong></td>
-<td></td>
-<td style="text-align: right;"><strong>94.0</strong></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="3-25t-400-tokens">3）音频数据集细分（共 2.5T；约 400 token/s）</h3>
-<p>| 数据集（示例/来源类型）                                             | 语言       | Token（T） |      约合时长（小时）* | 说明                         |</p>
-<table>
-<thead>
-<tr>
-<th>数据集（示例/来源类型）</th>
-<th>语言</th>
-<th style="text-align: right;">Token（T）</th>
-<th style="text-align: right;">约合时长（小时）*</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>CC 许可 YouTube 语音（讲座/播客/评测）</strong></td>
-<td>EN/ZH/多语</td>
-<td style="text-align: right;"><strong>1.4</strong></td>
-<td style="text-align: right;">~972,000</td>
-<td>API 合规索 + 频道白名单；静音/音乐占比过滤</td>
-</tr>
-<tr>
-<td><strong>开放播客/电台档案（CC/公有领域）</strong></td>
-<td>EN/ZH</td>
-<td style="text-align: right;"><strong>0.4</strong></td>
-<td style="text-align: right;">~277,000</td>
-<td>节目级元数据、章节/广告段识别</td>
-</tr>
-<tr>
-<td><strong>有标注通用语音（Common Voice/Libri 等）</strong></td>
-<td>多语</td>
-<td style="text-align: right;"><strong>0.1</strong></td>
-<td style="text-align: right;">~69,000</td>
-<td>口音覆盖、读法一致性治理</td>
-</tr>
-<tr>
-<td><strong>多语演讲/会议/公开课</strong></td>
-<td>多语</td>
-<td style="text-align: right;"><strong>0.3</strong></td>
-<td style="text-align: right;">~208,000</td>
-<td>讲义/字幕对齐，建立说话人聚类</td>
-</tr>
-<tr>
-<td><strong>其他长语音资源（合规）</strong></td>
-<td>多语</td>
-<td style="text-align: right;"><strong>0.3</strong></td>
-<td style="text-align: right;">~208,000</td>
-<td>长录音切片、VAD、去版权音乐</td>
-</tr>
-<tr>
-<td><strong>合计</strong></td>
-<td></td>
-<td style="text-align: right;"><strong>2.5</strong></td>
-<td style="text-align: right;"><strong>~1,734,000</strong></td>
-<td></td>
-</tr>
-<tr>
-<td>* 近似换算：<code>时长(小时) ≈ Token(T) × 1e12 / (400 token/s) / 3600</code></td>
-<td></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="4-25t-1536-tokens">4）视频数据集细分（共 2.5T；约 1536 token/s）</h3>
-<p>| 数据集（示例/来源类型）                                              | 语言       | Token（T） |    约合时长（小时）* | 说明                      |</p>
-<table>
-<thead>
-<tr>
-<th>数据集（示例/来源类型）</th>
-<th>语言</th>
-<th style="text-align: right;">Token（T）</th>
-<th style="text-align: right;">约合时长（小时）*</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>CC 许可 YouTube/教育视频</strong></td>
-<td>EN/ZH/多语</td>
-<td style="text-align: right;"><strong>1.5</strong></td>
-<td style="text-align: right;">~271,000</td>
-<td>讲解/纪录片/课堂优先；镜头切分与文字密度优先</td>
-</tr>
-<tr>
-<td><strong>教程/技术/科普短视频</strong></td>
-<td>EN/ZH</td>
-<td style="text-align: right;"><strong>0.4</strong></td>
-<td style="text-align: right;">~72,000</td>
-<td>竖屏适配；字幕/画面信息融合</td>
-</tr>
-<tr>
-<td><strong>纪录片/演讲剪辑</strong></td>
-<td>多语</td>
-<td style="text-align: right;"><strong>0.3</strong></td>
-<td style="text-align: right;">~54,000</td>
-<td>主题/章节化索引</td>
-</tr>
-<tr>
-<td><strong>其他合规来源（机构公开素材等）</strong></td>
-<td>多语</td>
-<td style="text-align: right;"><strong>0.3</strong></td>
-<td style="text-align: right;">~54,000</td>
-<td>版权条款核验</td>
-</tr>
-<tr>
-<td><strong>合计</strong></td>
-<td></td>
-<td style="text-align: right;"><strong>2.5</strong></td>
-<td style="text-align: right;"><strong>~451,000</strong></td>
-<td></td>
-</tr>
-<tr>
-<td>* 近似换算：<code>时长(小时) ≈ Token(T) × 1e12 / (1536 token/s) / 3600</code></td>
-<td></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h3 id="5-10t-256-token">5）图像数据集细分（共 1.0T；约 256 token/图）</h3>
-<p>| 数据集（示例/来源类型）                             | Token（T） |   约合图片张数* | 说明                  |</p>
-<table>
-<thead>
-<tr>
-<th>数据集（示例/来源类型）</th>
-<th style="text-align: right;">Token（T）</th>
-<th style="text-align: right;">约合图片张数*</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>大规模网页图像（ALT/TEXT 配对；LAION-like，自建管线）</strong></td>
-<td style="text-align: right;"><strong>0.8</strong></td>
-<td style="text-align: right;">~3.1B</td>
-<td>审美/相关性/NSFW/水印检测；去重</td>
-</tr>
-<tr>
-<td><strong>高质量图文对（教育/百科/技术插图等）</strong></td>
-<td style="text-align: right;"><strong>0.2</strong></td>
-<td style="text-align: right;">~0.78B</td>
-<td>图文一致性强，优先级权重更高</td>
-</tr>
-<tr>
-<td><strong>合计</strong></td>
-<td style="text-align: right;"><strong>1.0</strong></td>
-<td style="text-align: right;"><strong>~3.9B</strong></td>
-<td></td>
-</tr>
-<tr>
-<td>* 近似换算：<code>张数 ≈ Token(T) × 1e12 / 256</code></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="10t-chapter11">10T 训练轮的默认采样配方（可在 chapter11 中按阶段调整）</h2>
-<p>| 模态     |     采样占比 | 对应 Token（T） |</p>
-<table>
-<thead>
-<tr>
-<th>模态</th>
-<th style="text-align: right;">采样占比</th>
-<th style="text-align: right;">对应 Token（T）</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>文本</td>
-<td style="text-align: right;"><strong>75%</strong></td>
-<td style="text-align: right;"><strong>7.5</strong></td>
-</tr>
-<tr>
-<td>音频</td>
-<td style="text-align: right;"><strong>10%</strong></td>
-<td style="text-align: right;"><strong>1.0</strong></td>
-</tr>
-<tr>
-<td>视频</td>
-<td style="text-align: right;"><strong>10%</strong></td>
-<td style="text-align: right;"><strong>1.0</strong></td>
-</tr>
-<tr>
-<td>图像</td>
-<td style="text-align: right;"><strong>5%</strong></td>
-<td style="text-align: right;"><strong>0.5</strong></td>
-</tr>
-<tr>
-<td><strong>合计</strong></td>
-<td style="text-align: right;"><strong>100%</strong></td>
-<td style="text-align: right;"><strong>10.0</strong></td>
-</tr>
-</tbody>
-</table>
-<p><strong>语言配比（针对 9.5T 语言相关 token：文本+音频+视频）</strong></p>
+<h1 id="chapter2md">chapter2.md — 项目管理与里程碑</h1>
 <ul>
-<li>中文：<strong>~40%</strong>（约 3.8T）</li>
-<li>英文：<strong>~50%</strong>（约 4.75T）</li>
-<li>其他语种：<strong>~10%</strong>（约 0.95T）</li>
+<li>2.1 开篇与学习目标</li>
+<li>2.2 组织与角色分工（数据、离散化、模型、Infra、评测、法务）</li>
+<li>2.3 时间线（周粒度）：准备→P0 演示→Alpha→Beta→Freeze→Release</li>
+<li>2.4 Go/No-Go 门槛与风险清单（技术/合规/成本）</li>
+<li>2.5 成本与预算模型（算力/存储/带宽/人工）</li>
+<li>2.6 依赖矩阵与供应链（H100、NVLink、并行通信、对象存储）</li>
+<li>2.7 交付物与里程碑验收标准</li>
+<li>2.8 本章小结</li>
+<li>2.9 常见陷阱与错误</li>
 </ul>
-<blockquote>
-<p><strong>阶段建议</strong>：Phase A（前 3T）文本偏重（85/7.5/5/2.5）；Phase B（中 4T）均衡（70/12/12/6）；Phase C（后 3T）多模偏重（60/20/15/5），并对视频/音频提高长样本权重。</p>
-</blockquote>
-<hr />
-<h2 id="0">整体时间线（示例，起算为第 0 周）</h2>
-<blockquote>
-<p>若目标 30B，<strong>单轮 10T 训练周期约 7.5 个月</strong>（含缓冲）；若 7B约 2 个月。可先以 <strong>1B/7B 押注方案去风险</strong>，再滚动放大到 14B/30B。</p>
-</blockquote>
-<div class="codehilite"><pre><span></span><code><span class="n">周</span><span class="w"> </span><span class="mi">01</span><span class="err">–</span><span class="mi">04</span><span class="w">  </span><span class="n">立项</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">里程碑定义</span><span class="err">；</span><span class="n">合规与风控</span><span class="w"> </span><span class="n">baseline</span><span class="err">；</span><span class="n">PoC</span><span class="w"> </span><span class="n">管线搭建</span>
-<span class="n">周</span><span class="w"> </span><span class="mi">03</span><span class="err">–</span><span class="mi">10</span><span class="w">  </span><span class="n">文本</span><span class="o">/</span><span class="n">图像</span><span class="o">/</span><span class="n">音频</span><span class="o">/</span><span class="n">视频数据抓取</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">初步治理</span><span class="err">（</span><span class="n">并行</span><span class="err">）；</span><span class="n">质量模型上线</span>
-<span class="n">周</span><span class="w"> </span><span class="mi">06</span><span class="err">–</span><span class="mi">12</span><span class="w">  </span><span class="n">离散化器</span><span class="err">（</span><span class="n">音频</span><span class="o">/</span><span class="n">视频</span><span class="o">/</span><span class="n">图像</span><span class="err">）</span><span class="n">训练与</span><span class="w"> </span><span class="n">RVQ</span><span class="w"> </span><span class="n">定格</span><span class="err">；</span><span class="n">统一</span><span class="w"> </span><span class="n">tokenizer</span><span class="w"> </span><span class="n">定版</span>
-<span class="n">周</span><span class="w"> </span><span class="mi">08</span><span class="err">–</span><span class="mi">12</span><span class="w">  </span><span class="mi">1</span><span class="n">B</span><span class="w"> </span><span class="n">小模型预训练</span><span class="err">（</span><span class="mi">10</span><span class="n">T</span><span class="err">×</span><span class="n">试训</span><span class="w"> </span><span class="mi">1</span><span class="err">–</span><span class="mi">2</span><span class="n">T</span><span class="err">）→</span><span class="w"> </span><span class="n">指标线对齐</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="k">Go</span><span class="o">/</span><span class="k">No</span><span class="o">-</span><span class="k">Go</span>
-<span class="n">周</span><span class="w"> </span><span class="mi">10</span><span class="err">–</span><span class="mi">15</span><span class="w">  </span><span class="mi">7</span><span class="n">B</span><span class="w"> </span><span class="n">规模化预训练</span><span class="err">（</span><span class="n">目标过完</span><span class="w"> </span><span class="mi">10</span><span class="n">T</span><span class="err">）；</span><span class="n">评测与回归</span>
-<span class="n">周</span><span class="w"> </span><span class="mi">14</span><span class="err">–</span><span class="mi">22</span><span class="w">  </span><span class="mi">14</span><span class="n">B</span><span class="o">/</span><span class="mi">30</span><span class="n">B</span><span class="w"> </span><span class="n">准备</span><span class="err">（</span><span class="n">并行</span><span class="err">）：</span><span class="n">并行度</span><span class="o">/</span><span class="n">批量</span><span class="o">/</span><span class="n">IO</span><span class="w"> </span><span class="n">优化</span><span class="err">；</span><span class="n">数据二次治理</span>
-<span class="n">周</span><span class="w"> </span><span class="mi">16</span><span class="err">–</span><span class="mi">34</span><span class="w">  </span><span class="mi">30</span><span class="n">B</span><span class="w"> </span><span class="n">预训练</span><span class="err">（</span><span class="mi">10</span><span class="n">T</span><span class="err">）</span><span class="n">主线</span><span class="err">；</span><span class="n">中期</span><span class="o">/</span><span class="n">末期评测与回归</span><span class="err">；</span><span class="n">故障演练</span>
-<span class="n">周</span><span class="w"> </span><span class="mi">35</span><span class="err">–</span><span class="mi">38</span><span class="w">  </span><span class="n">模型冻结</span><span class="o">/</span><span class="n">验收</span><span class="err">；</span><span class="k">checkpoint</span><span class="o">/</span><span class="n">离散器</span><span class="o">/</span><span class="n">词表打包</span><span class="err">；</span><span class="n">发布与归档</span>
-</code></pre></div>
-
-<p><strong>关键 Go/No-Go 门槛（示例）</strong></p>
+<h1 id="chapter3md-100t-token">chapter3.md — 数据配方设计（100T token 池）</h1>
 <ul>
-<li>数据：重复率 &lt; 3%，PII/受限内容召回 &gt; 95%，多语覆盖度 ≥ 10 种主语种</li>
-<li>训练：吞吐利用率 ≥ 32%，稳定无 NaN ≥ 1e6 step，显存值与通信抖动达标</li>
-<li>评测：Text/Audio/Video ppl 边际下降曲线健康；V-L 任务达到预设阈值</li>
+<li>3.1 开篇与学习目标</li>
+<li>3.2 模态/语言/域目标配比（中英 90%、其他语种 10%）</li>
+<li>3.3 Token 预算到数据集分解方法（按数据集逐项分配）</li>
+<li>3.4 课程与退火：分阶段采样与温度调度</li>
+<li>3.5 质量分层与权重（A/B/C 层与重采样策略）</li>
+<li>3.6 开源语料与自采的组合策略（“尽量复用别人洗好的包”）</li>
+<li>3.7 合成数据的角色与比例（文本/音频/视频补齐长尾）</li>
+<li>3.8 数据版本化与数据卡（Data Card / 许可证跟踪）</li>
+<li>3.9 本章小结</li>
+<li>3.10 常见陷阱与错误</li>
 </ul>
-<hr />
-<h2 id="chapter13">评测总览（细节见 chapter13）</h2>
+<h1 id="chapter4md">chapter4.md — 文本数据：抓取、清洗、去重与质量分层</h1>
 <ul>
-<li>
-<p><strong>自回归 Perplexity（ppl）</strong>：</p>
-</li>
-<li>
-<p>文本：多域/多语（新闻/百科/代码注释/论坛）</p>
-</li>
-<li>音频：语音 token 流 ppl（分语种/口音/噪声场景）</li>
-<li>视频：视频 token 流 ppl（分类目：教育/纪录片/短视频）</li>
-<li>
-<p><strong>Vision-Language</strong>（统一自回归头，早期融合）：</p>
-</li>
-<li>
-<p>图文检索（R@k）、图文描述（CIDEr/BLEU/CLIPScore）、图文问答（针对多样视觉语义）</p>
-</li>
-<li><strong>数据泄漏与重叠检测</strong>：训练/评测交叉去重、最近邻相似性阈值</li>
-<li><strong>统计与置信</strong>：bootstrap、分布漂移检测、回归测试基线</li>
+<li>4.1 开篇与学习目标</li>
+<li>4.2 数据来源与合规（维基、书籍、新闻、网页、论坛等）</li>
+<li>4.3 抓取与解析（爬虫策略、动态页面、robots.txt 遵循）</li>
+<li>4.4 语言识别与分布控制（fastText / cld3 等）</li>
+<li>4.5 质量过滤：<strong>fastText</strong> 主题/语言、<strong>小模型</strong> 因果困惑度过滤、毒性/PII</li>
+<li>4.6 去重：Exact / Near-dup（MinHash/SimHash、跨语种归并）</li>
+<li>4.7 Token 化、长度分布与长序列采样</li>
+<li>4.8 数据集级 token 预算与表格（逐集分配占比）</li>
+<li>4.9 本章小结</li>
+<li>4.10 常见陷阱与错误</li>
 </ul>
-<hr />
-<h2 id="_3">工程与合规要点（全书贯穿）</h2>
+<h1 id="chapter5md-asr-rvq">chapter5.md — 音频数据：合规抓取、ASR 对齐、RVQ 离散化</h1>
 <ul>
-<li><strong>合法来源 + 许可清晰</strong>：只使用 CC/公有领域/自有授权内容；严格遵守网站 TOS 与 robots.txt；不绕过 DRM/付费墙/技术限制。</li>
-<li><strong>PII/敏感内容治理</strong>：正则 + NER + 小型分类器 + 启发式 + 人审抽检。</li>
-<li><strong>跨模态近重去重</strong>：文本 embedding + 感知 hash（图像/视频缩略帧）+ 语音指纹。</li>
-<li><strong>偏见与安全</strong>：毒性/仇恨/成人/暴力分级；多语安全分类器；红队脚本。</li>
-<li><strong>可审计与可追溯</strong>：每条数据的 lineage/哈希/许可记录；不可变元数据仓。</li>
+<li>5.1 开篇与学习目标</li>
+<li>5.2 来源与许可（播客/演讲/有声书/YouTube-音轨）</li>
+<li>5.3 抓取与切分（VAD、静音/噪声过滤、采样率/比特率）</li>
+<li>5.4 ASR 转写与对齐（词级/句级时间戳、双语字幕）</li>
+<li>5.5 质量评估：SNR、WER、说话人分离/聚类</li>
+<li>5.6 离散化：Encodec / 音频 VQ-VAE + <strong>多级 RVQ</strong>（码率与 token/秒）</li>
+<li>5.7 过滤：小模型音频分类（脏话、广告、音乐占比）</li>
+<li>5.8 合成音频：TTS/TTS-StyleMix 与比例控制</li>
+<li>5.9 Token 预算与存储搬运成本（IO/冷存/热存）</li>
+<li>5.10 本章小结</li>
+<li>5.11 常见陷阱与错误</li>
 </ul>
-<hr />
-<h2 id="_4">你将得到什么（交付物）</h2>
+<h1 id="chapter6md">chapter6.md — 视频数据：合规抓取、切片、时空离散化</h1>
 <ul>
-<li><strong>预训练 checkpoint</strong>（1B/7B/14B/30B 任一或多档）</li>
-<li><strong>统一 tokenizer 与多模态离散化器</strong>（版本与码率固定）</li>
-<li><strong>Megatron 训练与评测配置</strong>（TP/PP/DP、混采策略、profile 报告）</li>
-<li><strong>数据治理与采样配置</strong>（可复现实验编号、过滤器权重、质量阈值）</li>
-<li><strong>评测报告</strong>（ppl 与 V-L 指标、泄漏检查、误差分析）</li>
+<li>6.1 开篇与学习目标</li>
+<li>6.2 来源与许可（YouTube/学术/CC 库），字幕/元数据抓取</li>
+<li>6.3 镜头切分与采样（fps、关键帧、Tubelet）</li>
+<li>6.4 音轨/字幕抽取、OCR 与语义对齐</li>
+<li>6.5 离散化：视频 VQ + <strong>RVQ</strong>（帧块码本、token/秒）</li>
+<li>6.6 质量过滤：模糊/水印/重片段/无关内容</li>
+<li>6.7 存储与搬运成本模型（TB/小时、分层存储、预取）</li>
+<li>6.8 合成视频与数据扩增（可选）</li>
+<li>6.9 Token 预算与课程调度（短视频 vs 长视频）</li>
+<li>6.10 本章小结</li>
+<li>6.11 常见陷阱与错误</li>
 </ul>
-<hr />
-<h2 id="_5">如何使用本教程</h2>
-<ol>
-<li><strong>先跑通 PoC</strong>（chapter1–3、8、10、11 的最小路径）。</li>
-<li><strong>从 1B/7B 起步</strong>，建立 ppl 与 V-L 的“可预期”下降曲线与数据质量仪表盘。</li>
-<li><strong>滚动治理与扩容</strong>：据—训练—评测三线并行，达标后放大到 14B/30B。</li>
-<li><strong>严格合规</strong>：每次引入新数据源都通过 chapter14 的 checklist。</li>
-<li><strong>版本化一切</strong>：数据切片、过滤器、离散化器、词表、训练配置、评测集。</li>
-</ol>
-<hr />
-<h2 id="_6">术语与约定</h2>
+<h1 id="chapter7md">chapter7.md — 图像数据：采集、质量打分与离散化</h1>
 <ul>
-<li><strong>Token</strong>：文本 BPE token 或经编码器+RVQ 得到的离散 token。</li>
-<li><strong>10T 训练轮</strong>：从 100T 数据池按设定配方采样 10T token 进行一次完整训练。</li>
-<li><strong>ppl</strong>：自回归负对数似然的困惑度。</li>
-<li><strong>RVQ</strong>：Residual Vector Quantization。</li>
-<li><strong>TP/PP/DP/SP/CP</strong>：Megatron 的张量/流水/数据/序列/上下文并行。</li>
+<li>7.1 开篇与学习目标</li>
+<li>7.2 ALT/TEXT 配对与文本相关性</li>
+<li>7.3 审美/主体性/可读性评分（小模型质量打分）</li>
+<li>7.4 去重（感知哈希/CLIP 向量近重）</li>
+<li>7.5 离散化：dVAE/VQGAN/VQ-VAE（典型 16×16 latent → ~256 token/图）</li>
+<li>7.6 Token 预算、分辨率与裁切策略</li>
+<li>7.7 数据卡与版权标注</li>
+<li>7.8 本章小结</li>
+<li>7.9 常见陷阱与错误</li>
+</ul>
+<h1 id="chapter8md-tokenizer">chapter8.md — Tokenizer 与词表：多模扩词、特殊符与对齐</h1>
+<ul>
+<li>8.1 开篇与学习目标</li>
+<li>8.2 文本沿用 <strong>Qwen tokenizer</strong> 的多模扩展</li>
+<li>8.3 模态特殊符与段标记（<img>, <aud>, <vid>, <seg> 等）</li>
+<li>8.4 连续特征编码器 + <strong>RVQ</strong> 的码本并入统一词表</li>
+<li>8.5 时间/空间位置编码与对齐标注（帧/块/时间戳）</li>
+<li>8.6 长上下文对齐与分块拼接策略</li>
+<li>8.7 样本串联与 Packing 规范（多模混拼）</li>
+<li>8.8 词表版本化与兼容性</li>
+<li>8.9 本章小结</li>
+<li>8.10 常见陷阱与错误</li>
+</ul>
+<h1 id="chapter9md-1b7b10b14b30b">chapter9.md — 模型结构与超参数（1B/7B/10B/14B/30B）</h1>
+<ul>
+<li>9.1 开篇与学习目标</li>
+<li>9.2 类 Qwen 的 <strong>dense decoder-only</strong> 主体（早期融合输入）</li>
+<li>9.3 关键模块：RoPE、RMSNorm、SwiGLU、KV Cache</li>
+<li>9.4 尺度配置表：<strong>1B</strong> 与 <strong>10B</strong>（层数/隐藏维/头数/上下文）</li>
+<li>9.5 位置编码多模对齐与段间屏蔽</li>
+<li>9.6 优化器与正则（AdamW、权重衰减、Dropout、Label Smoothing）</li>
+<li>9.7 训练稳定性技巧（学习率、Warmup、Cosine、Grad Clip）</li>
+<li>9.8 推理与 KV 内存估算（不同上下文与 batch）</li>
+<li>9.9 本章小结</li>
+<li>9.10 常见陷阱与错误</li>
+</ul>
+<h1 id="chapter10md-megatron-256h100">chapter10.md — 训练基础设施（Megatron @ 256×H100）</h1>
+<ul>
+<li>10.1 开篇与学习目标</li>
+<li>10.2 并行切分：TP/PP/DP/SP/CP 推荐组合</li>
+<li>10.3 精度与内存：BF16/FP8、Activation Checkpointing、ZeRO</li>
+<li>10.4 通信与拓扑：NVLink/NVSwitch、IB/NIC 亲和</li>
+<li>10.5 数据输入与高吞吐 IO（WebDataset/TFRecord/Record I/O）</li>
+<li>10.6 调度与容错（流水线级重启、断点续训、Checkpointer）</li>
+<li>10.7 性能剖析：吞吐、利用率、重算比例</li>
+<li>10.8 安全与权限（密钥、凭证、桶策略）</li>
+<li>10.9 本章小结</li>
+<li>10.10 常见陷阱与错误</li>
+</ul>
+<h1 id="chapter11md-10t-token">chapter11.md — 数据混采与课程策略（10T token 单轮）</h1>
+<ul>
+<li>11.1 开篇与学习目标</li>
+<li>11.2 模态/语言/域的采样温度与退火计划</li>
+<li>11.3 长序列比例与上下文扩展课程</li>
+<li>11.4 多模拼接与 Mask 规则（段间屏蔽、跨模对齐）</li>
+<li>11.5 去重后再采样与新鲜度控制</li>
+<li>11.6 在线质量重加权（loss-based reweighting）</li>
+<li>11.7 本章小结</li>
+<li>11.8 常见陷阱与错误</li>
+</ul>
+<h1 id="chapter12md">chapter12.md — 监控与可观测性</h1>
+<ul>
+<li>12.1 开篇与学习目标</li>
+<li>12.2 训练侧指标：吞吐、稳定性、损失、显存/通信</li>
+<li>12.3 数据侧指标：覆盖度、重复率、PII/性率、语言/模态占比</li>
+<li>12.4 离散化流水线监控（码率、丢帧、RVQ 码本利用率）</li>
+<li>12.5 告警与回滚策略（数据/模型双向熔断）</li>
+<li>12.6 自动评测与回归检测</li>
+<li>12.7 本章小结</li>
+<li>12.8 常见陷阱与错误</li>
+</ul>
+<h1 id="chapter13md-ar-perplexity-vl">chapter13.md — 评测体系（AR Perplexity &amp; VL 指标）</h1>
+<ul>
+<li>13.1 开篇与学习目标</li>
+<li>13.2 文本自回归困惑度（分域/分语种）</li>
+<li>13.3 音频自回归困惑度（token/秒与 bpc 对应）</li>
+<li>13.4 视频自回归困惑度（时空 token 归一化）</li>
+<li>13.5 视觉-语言任务：检索/描述/问答/指令跟随</li>
+<li>13.6 泄漏检测与去重验证（近重比对评测集）</li>
+<li>13.7 统计显著性与A/B 标准</li>
+<li>13.8 本章小结</li>
+<li>13.9 常见陷阱与错误</li>
+</ul>
+<h1 id="chapter14md">chapter14.md — 安全与合规</h1>
+<ul>
+<li>14.1 开篇与学习目标</li>
+<li>14.2 版权/许可证/TOS 与 robots.txt</li>
+<li>14.3 PII 与敏感内容检测（文本/语音/图像/视频）</li>
+<li>14.4 红队与风险分级（输入/输出/数据/模型）</li>
+<li>14.5 数据下架与追溯（Data Lineage）</li>
+<li>14.6 章小结</li>
+<li>14.7 常见陷阱与错误</li>
+</ul>
+<h1 id="chapter15md-checkpoint">chapter15.md — 交付与落地（Checkpoint &amp; 蒸馏）</h1>
+<ul>
+<li>15.1 开篇与学习目标</li>
+<li>15.2 交付物打包：Checkpoint、Tokenizer、离散化器版本</li>
+<li>15.3 推理与离线批处理（多模 token 化/反离散化）</li>
+<li>15.4 <strong>Gemma 式 logits 蒸馏</strong>：可行性、收益与代价</li>
+<li>15.5 量化与加速（INT8/INT4、KV 压缩）</li>
+<li>15.6 模型卡与数据卡发布</li>
+<li>15.7 本章小结</li>
+<li>15.8 常见陷阱与错误</li>
+</ul>
+<h1 id="appendixamd">appendixA.md — 计算与容量估算（公式与算例）</h1>
+<ul>
+<li>A.1 训练 FLOPs 与时长估算（按 token、参数、并行度）</li>
+<li>A.2 显存与激活开销（KV Cache/梯度/优化器）</li>
+<li>A.3 IO 与存储：视频/音频/图像/文本分层存储</li>
+<li>A.4 成本模型：1B/10B（单轮 10T token）的预算区间</li>
+<li>A.5 网络与通信瓶颈分析（AllReduce/AllToAll）</li>
+<li>A.6 经验法则速查表</li>
+<li>A.7 本章小结</li>
+<li>A.8 常见陷阱与错误</li>
+</ul>
+<h1 id="appendixbmd">appendixB.md — 工具链与脚手架（配置与模板）</h1>
+<ul>
+<li>B.1 数据侧：抓取（yt-dlp*/API、ETL 与 Schema 约定</li>
+<li>B.2 离散化流水线：音频/视频/图像编码器与 RVQ 配置</li>
+<li>B.3 训练框架：Megatron 配置模板与日志结构</li>
+<li>B.4 监控/看板：指标命名与报警门限模板</li>
+<li>B.5 评测脚本与用例设计（数据泄漏卫士）</li>
+<li>B.6 发布清单与复现实验记录</li>
+<li>B.7 本章小结</li>
+<li>B.8 常见陷阱与错误</li>
+</ul>
+<h1 id="appendixcmd-runbook">appendixC.md — 常见故障与排障（Runbook）</h1>
+<ul>
+<li>C.1 训练不收敛/震荡（学习率/归一化/精度）</li>
+<li>C.2 OOM 与死锁（并行切分/梯度累积/通信超时）</li>
+<li>C.3 数据侧异常（语言分布漂移/重复暴增/PII 泄漏）</li>
+<li>C.4 离散化异常（RVQ 码本崩塌/码率失衡/不同步）</li>
+<li>C.5 评测回归与泄漏告警（定位与回滚）</li>
+<li>C.6 合规投诉与数据下架（流程与证据保全）</li>
+<li>C.7 本章小结</li>
+<li>C.8 常见陷阱与错误</li>
 </ul>
             </article>
             
-            <nav class="page-nav"><a href="chapter1.html" class="nav-link next">第一章：总览与技术路线 →</a></nav>
+            <nav class="page-nav"><a href="chapter1.html" class="nav-link next">Chapter 1: 总览与技术路线 →</a></nav>
         </main>
     </div>
 </body>
