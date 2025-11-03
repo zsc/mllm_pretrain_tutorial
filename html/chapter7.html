@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="./">
-    <title>第七章：图像数据——采集、质量打分与离散化</title>
+    <title>第 7 章 — 图像数据：采集、质量打分与离散化</title>
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/highlight.css">
     <script src="assets/script.js" defer></script>
@@ -42,261 +42,356 @@
                 <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
             </div>
             <div id="tree-container">
-                <ul class="nav-list"><li class=""><a href="index.html">index.md（导读与目录）</a></li><li class=""><a href="chapter1.html">Chapter 1: 总览与技术路线</a></li><li class=""><a href="chapter2.html">chapter2.md — 项目管理与里程碑</a></li><li class=""><a href="chapter3.html">chapter2.md — 项目管理与里程碑</a></li><li class=""><a href="chapter4.html">第 4 章 文本数据：抓取、清洗、去重与质量分层</a></li><li class=""><a href="chapter5.html">第 5 章 — 音频数据：合规抓取、ASR 对齐、RVQ 离散化</a></li><li class=""><a href="chapter6.html">第 6 章 — 视频数据：合规抓取、切片与时空离散化</a></li><li class="active"><a href="chapter7.html">第七章：图像数据——采集、质量打分与离散化</a></li><li class=""><a href="chapter8.html">第八章：Tokenizer 与词表：多模扩词、特殊符与对齐标注</a></li><li class=""><a href="CLAUDE.html">Untitled</a></li></ul>
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">index.md（导读与目录）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Chapter 1: 总览与技术路线</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">项目管理与里程碑</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第三章：数据配方设计（100T token 池）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 4 章 文本数据：抓取、清洗、去重与质量分层</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 5 章 — 音频数据：合规抓取、ASR 对齐、RVQ 离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 6 章 — 视频数据：合规抓取、切片与时空离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 7 章 — 图像数据：采集、质量打分与离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Tokenizer 与词表：多模扩词、特殊符与对齐</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">模型结构与超参数（1B/10B）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十章：训练基础设施（Megatron @ 256×H100）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 11 章：数据混采与课程策略（10T token 单轮）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十二章：监控与可观测性</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十三章 评测体系：从自回归困惑度到视觉语言指标</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十四章：安全与合规</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
             </div>
         </nav>
         
         <main class="content">
             <article>
-                <h1 id="_1">第七章：图像数据——采集、质量打分与离散化</h1>
-<blockquote>
-<p><strong>本章目标</strong>：构建一个 <strong>1.0T token</strong> (约 <strong>3.9B 张图片</strong>) 的高质量、已离散化的图像数据集。
-<strong>核心流水线</strong>：合规采集 → 多维度质量过滤 → VQ-VAE 离散化。</p>
-</blockquote>
-<hr />
-<h2 id="1">1. 开篇段落</h2>
-<p>欢迎来到第七章。在本章中，我们将专注于多模态数据中最直观、信息密度最高的一种：<strong>图像</strong>。我们的目标是构建一个庞大（1.0T token）且优质的图像数据集，作为模型视觉理解能力的基石。不同于文本，图像数据的挑战不仅在于“量”，更在于“质”与“对齐”。一张低质量、模糊或与描述毫不相关的图片，对模型来说是噪声而非信号。</p>
-<p>本章将引导您完成一个端到端的生产级图像数据处理流水线。我们将从两个主要来源——大规模网页抓取和高质量精选集——出发，设计合规采集策略。随后，我们将深入探讨一个多阶段的质量过滤与打分系统，涵盖从基础元数据、内容安全，到利用CLIP模型进行图文相关性打分等高级技术。最后，我们将详细阐述如何使用向量量化自编码器（VQ-VAE）将图像从连续的像素空间，统一转换为离散的 token 序列，使其能与文本等其他模态无缝拼接，送入自回归 Transformer。完成本章后，您将拥有一套可复现、可扩展的流程，用于生产模型预训练所需的图像“燃料”。</p>
-<h2 id="2">2. 文字论述</h2>
-<p>我们的图像数据策略旨在平衡<strong>广度</strong>与<strong>深度</strong>。根据 <code>index.md</code> 的规划，1.0T 图像 token 将由两部分构成：</p>
+                <h1 id="7">第 7 章 — 图像数据：采集、质量打分与离散化</h1>
+<h2 id="71">7.1 开篇与学习目标</h2>
+<p>欢迎来到第七章。在本章中，我们将深入探讨多模态预训练中至关重要的一环：图像数据的处理。与结构化的文本不同，图像是高维、连续的信号。为了让自回归模型能够像处理文字一样处理图像，我们必须建立一套从原始像素到离散 token 的完整流水线。这个过程不仅是简单的格式转换，更是一系列精细的数据治理、质量控制和表征学习的组合。</p>
+<p>本章的学习目标是：</p>
 <ul>
-<li><strong>0.8T token（~3.1B 张图片）</strong>：来自大规模网页图文对，类似 LAION 的自建管线，追求数据的多样性与规模。</li>
-<li><strong>0.2T token（~0.8B 张图片）</strong>：来自高质量、强对齐的图文对，如教育、百科、技术插图等，作为模型认知能力的“锚点。</li>
+<li>掌握构建大规模图像-文本对数据集的核心流程。</li>
+<li>学会使用小模型对图像进行多维度（相关性、美学、合规性）的质量打分与过滤。</li>
+<li>理解并能选择合适的去重技术，以应对精确重复和语义重复。</li>
+<li>深入理解图像离散化（Tokenization）的原理，特别是基于 VQ-VAE/VQGAN 的法。</li>
+<li>能够为项目制定合理的图像 token 预算、分辨率和裁切策略。</li>
 </ul>
-<h3 id="21-data-collection-strategy">2.1 数据采集策略 (Data Collection Strategy)</h3>
-<h4 id="211-laion-like">2.1.1 大规模网页图文对（LAION-like 自建管线）</h4>
-<p>直接复用 LAION 等现有数据集可能存在合规风险或数据陈旧问题。自建一个轻量级采集管线能提供更大的灵活性与控制力。</p>
-<p><strong>核心流程</strong>:</p>
+<p>完成本章后，您将有能力设计并实施一个生产级的图像数据预处理流水线，为后续的多模态模型训练提供高质量、格式统一的“视觉语料”。</p>
+<h2 id="72-alttext">7.2 ALT/TEXT 配对与文本相关性</h2>
+<p>多模态模型学习视觉概念的基础是海量的图像-文本对（Image-Text Pairs）。其中，网页图片附带的 <code>alt</code> 文本（alternative text）是最常见和最丰富的来源。然而，这些文本质量参差不齐，从精确描述到无关的 SEO 关键词，甚至只是“图片”二字。因此，确保图像和文本的语义相关性是数据清洗的第一步，也是最关键的一步。</p>
+<p><strong>核心方法：CLIP Score 过滤</strong></p>
+<p>我们借助一个预训练好的、强大的视觉-语言对齐模型（如 CLIP）来为我们的数据“打分”。</p>
 <ol>
-<li><strong>数据源</strong>：利用 Common Crawl 的 WARC 文件索引（或 WAT/WET 元数据文件）作为起点。这是互联网网页的公开快照。</li>
-<li><strong>HTML 解析</strong>：使用高效的 HTML 解析库（如 <code>lxml</code>, <code>selectolax</code>）批量解析网页，提取 <code>&lt;img&gt;</code> 标签及其 <code>alt</code> 文本属性。</li>
-<li><strong>初步筛选</strong>：在解析阶段就进行初步过滤，只保留包含非空 <code>alt</code> 文本、<code>src</code> 链接有效，且 <code>alt</code> 文本长度在合理范围（如 5-200 个字符）的 <code>&lt;img&gt;</code> 标签。</li>
-<li><strong>异步下载</strong>：使用高并发的下载器（如 <code>aiohttp</code>）下载图片。设置严格的超时、重试与大小限制（如最大 10MB）。</li>
-<li><strong>合规性检查</strong>：<ul>
-<li>在下载前，检查目标域名的 <code>robots.txt</code>，确保允许爬取。</li>
-<li>记录每个图文对的来源 URL，以便追溯与审计。</li>
-<li>过滤掉已知受版权严格保护的网站域名（如商业图库）。</li>
+<li>
+<p><strong>特征提取</strong>：对于每一个图像-文本对 <code>(I, T)</code>，我们分别用 CLIP 的图像编码器 $E_I$ 和文本编码器 $E_T$ 提取特征向量：
+    $v_I = E_I(I)$
+    $v_T = E_T(T)$</p>
+</li>
+<li>
+<p><strong>计算相似度</strong>：计算两个特征向量的余弦相似度，这个值即为“CLIP Score”：
+    $S_{CLIP} = \frac{v_I \cdot v_T}{|v_I| |v_T|}$</p>
+</li>
+<li>
+<p><strong>设定阈值过滤</strong>：我们设定一个经验阈值 $\theta$（例如，LAION 数据集使用了 0.28-0.32 范围内的阈值）。只有当 $S_{CLIP} &gt; \theta$ 时，我们才认为这对数据是相关的，予以保留。</p>
+</li>
+</ol>
+<p><strong>经验法则 (Rule-of-Thumb):</strong></p>
+<ul>
+<li>对于通用领域的网页抓取数据，CLIP Score 阈值设在 <strong>0.28 到 0.32</strong> 之间是一个比较均衡的起点。</li>
+<li>阈值太高会过滤掉许多概念正确但描述方式抽象或不直接的样本（如诗意描述的图片），导致数据多样性下降。</li>
+<li>阈值太低则会引入大量噪声，例如，图片是“一只猫”，文本是“点击查看更多萌宠图片”，这种样本对模型学习是有害的。</li>
+</ul>
+<p>这个步骤能极大地提升数据集的信噪比，是构高质量视觉语言数据集的基石。</p>
+<h2 id="73">7.3 审美/主体性/可读性评分（小模型质量打分）</h2>
+<p>仅仅保证图文相关是不够的。一张低质量的图片（如模糊、过曝、包含大量水印或令人不适的内容）即便配有完美的描述，也会损害模型的学习效果。因此，我们需要一个“图像质量打分”流水线，利用一系列小模型对图像本身进行多维度评估。</p>
+<p>这个流水线通常包含以下几个并行的“打分器”：</p>
+<ol>
+<li>
+<p><strong>美学评分 (Aesthetic Score)</strong>：</p>
+<ul>
+<li><strong>方法</strong>：训练一个分类器或回归器，在人类标注的美学评分数据集（如 <a href="https://github.com/mtobeiyf/ava_downloader">AVA</a>）上进行训练。该模型输入一张图片，输出一个 1-10 的分数。</li>
+<li><strong>应用</strong>：保留美学评分高于某个阈值（如 5.0）的图片，过滤掉那些构图不佳、模糊、低分辨率的图像。</li>
+</ul>
+</li>
+<li>
+<p><strong>主体性/原创性评分 (Originality/Watermark Score)</strong>：</p>
+<ul>
+<li><strong>方法</strong>：训练一个水印检测模型，识别常见的商业图库水印或社交媒体水印。</li>
+<li><strong>应用</strong>：过滤掉水印占比过高的图片，因为它们通常是商业素材，可能引入版权风险，并且水印本身也是一种视觉噪声。</li>
+</ul>
+</li>
+<li>
+<p><strong>安全性与合规性评分 (NSFW Score)</strong>：</p>
+<ul>
+<li><strong>方法</strong>：使用一个预训练的 NSFW（Not Safe For Work）分类器，识别色情、暴力、血腥等不适宜内容。</li>
+<li><strong>应用</strong>：这是<strong>必须</strong>的步骤。根据项目需求，严格过滤掉 NSFW 分数高于安全阈值的图片，确保模型和数据的合规性。</li>
+</ul>
+</li>
+<li>
+<p><strong>文本可读性评分 (Text Readability Score)</strong>：</p>
+<ul>
+<li><strong>方法</strong>：对图片运行 OCR（光学字符识别），如果识别出的文本是乱码或置信度极低，说明图片中的文字质量不高。</li>
+<li><strong>应用</strong>：过滤掉那些主要内容是文字但文字模糊不清的图片（如低质量的截图）。</li>
 </ul>
 </li>
 </ol>
-<p><strong>Rule-of-Thumb</strong>:</p>
-<ul>
-<li>启动约 10-20 台云服务器并行处理 Common Crawl 数据切片，每台配置 32+ vCPU 和高速网络。</li>
-<li>将原始下载的图片与元数据（URL, alt text）存储在对象存储（如 S3/OSS）中，按来源域名或日期分桶，方便后续管理。</li>
-</ul>
-<h4 id="212">2.1.2 高质量精选数据集</h4>
-<p>这部分数据旨在提升模型在特定领域的专业性与图文对齐的精确度。</p>
-<ul>
-<li><strong>来源</strong>：<ul>
-<li><strong>公共科学/教育资源</strong>：维基百科、arXiv (插图与图表)、古登堡计划 (书籍插图)。</li>
-<li><strong>开源数据集</strong>：Conceptual Captions (CC-BY)、SBU Captions、部分 COCO/Flickr30k (需仔细核对许可证)。</li>
-<li><strong>机构合作/自有数据</strong>：如果企业有自有或授权的图片资源（如产品图、教学材料），应优先用。</li>
-</ul>
-</li>
-<li><strong>处理方式</strong>：这些数据集通常较为干净，但仍需通过下文的质量过滤流水线，特别是图文相关性打分，以确保一致性。</li>
-</ul>
-<h3 id="22">2.2 质量过滤与打分流水线</h3>
-<p>这是图像数据处理的核心，一个糟糕的过滤系统会浪费大量算力训练一个“看图说话”能力低下的模型。我们的流水线设计如下：</p>
-<div class="codehilite"><pre><span></span><code><span class="c">ASCII Art: Image Processing Pipeline</span>
+<p><strong>ASCII 系统图：多维度质量过滤流水线</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="c">                  </span><span class="nb">+----------------------+</span>
+<span class="c">原始图像 </span><span class="nb">--------</span><span class="nv">&gt;</span><span class="c"> |   美学评分模型       | </span><span class="nb">--------</span><span class="nv">&gt;</span><span class="c"> </span><span class="k">[</span><span class="c">美学分 </span><span class="nv">&gt;</span><span class="c"> 5</span><span class="nt">.</span><span class="c">0?</span><span class="k">]</span><span class="c"> </span><span class="nb">--+</span>
+<span class="c">(Image)           </span><span class="nb">+----------------------+</span><span class="c">                           |</span>
 
-<span class="c">  </span><span class="k">[</span><span class="c">Raw Data Batch</span><span class="k">]</span>
-<span class="c">         |</span>
-<span class="c">         v</span>
-<span class="nb">+------------------------+</span>
-<span class="c">| 1</span><span class="nt">.</span><span class="c"> 基础元数据过滤      |   (Image Size </span><span class="nv">&gt;</span><span class="c"> 256x256</span><span class="nt">,</span><span class="c"> Aspect Ratio 1:4</span><span class="nb">-</span><span class="c">4:1</span><span class="nt">,</span><span class="c"> etc</span><span class="nt">.</span><span class="c">)</span>
-<span class="nb">+------------------------+</span>
-<span class="c">         |</span>
-<span class="c">         v</span>
-<span class="nb">+------------------------+</span>
-<span class="c">| 2</span><span class="nt">.</span><span class="c"> 内容安全与合规过滤  |   (NSFW Classifier</span><span class="nt">,</span><span class="c"> Watermark Detection)</span>
-<span class="nb">+------------------------+</span>
-<span class="c">         |</span>
-<span class="c">         v</span>
-<span class="nb">+------------------------+</span>
-<span class="c">| 3</span><span class="nt">.</span><span class="c"> 近似去重            |   (pHash/dHash </span><span class="nb">+</span><span class="c"> Similarity Search)</span>
-<span class="nb">+------------------------+</span>
-<span class="c">         |</span>
-<span class="c">         v</span>
-<span class="nb">+------------------------+</span>
-<span class="c">| 4</span><span class="nt">.</span><span class="c"> 质量打分            |   (Aesthetic Score</span><span class="nt">,</span><span class="c"> Sharpness Score)</span>
-<span class="nb">+------------------------+</span>
-<span class="c">         |</span>
-<span class="c">         v</span>
-<span class="nb">+------------------------+</span>
-<span class="c">| 5</span><span class="nt">.</span><span class="c"> 图文相关性打分      |   (CLIP Score)</span>
-<span class="nb">+------------------------+</span>
-<span class="c">         |</span>
-<span class="c">         v</span>
-<span class="k">[</span><span class="c">Scored &amp; Filtered Data</span><span class="k">]</span><span class="c"> </span><span class="nb">--</span><span class="nv">&gt;</span><span class="c"> (Ready for Discretization)</span>
+<span class="c">(Image)           </span><span class="nb">+----------------------+</span><span class="c">                           |</span>
+<span class="c">                      |                                              |</span>
+
+<span class="c">                      </span><span class="nb">+----------------------+</span><span class="c">                           v</span>
+<span class="c">                      |   水印检测模型       | </span><span class="nb">--------</span><span class="nv">&gt;</span><span class="c"> </span><span class="k">[</span><span class="c">水印占比 </span><span class="nv">&lt;</span><span class="c"> 10%?</span><span class="k">]</span><span class="c"> </span><span class="nb">--</span><span class="nv">&gt;</span><span class="c"> </span><span class="k">[</span><span class="c">通过/过滤</span><span class="k">]</span>
+<span class="c">                      </span><span class="nb">+----------------------+</span><span class="c">                           ^</span>
+<span class="c">                      |                                              |</span>
+<span class="c">                      </span><span class="nb">+----------------------+</span><span class="c">                           |</span>
+<span class="c">                      |   NSFW 分类器        | </span><span class="nb">--------</span><span class="nv">&gt;</span><span class="c"> </span><span class="k">[</span><span class="c">NSFW分 </span><span class="nv">&lt;</span><span class="c"> 0</span><span class="nt">.</span><span class="c">1?</span><span class="k">]</span><span class="c"> </span><span class="nb">--+</span>
+<span class="c">                      </span><span class="nb">+----------------------+</span>
 </code></pre></div>
 
+<h2 id="74-clip">7.4 去重（感知哈希/CLIP 向量近重）</h2>
+<p>与文本一样，图像数据集中也存在大量的重复，这会浪费计算资源并让模型产生偏见。图像去重分为两个层次：</p>
 <ol>
 <li>
-<p><strong>基础元数据过滤 (Basic Metadata Filtering)</strong></p>
+<p><strong>精确去重 (Exact Deduplication)</strong>：</p>
 <ul>
-<li><strong>分辨率</strong>：过滤掉长或宽小于 256 像素的图片，因为它们在缩放后会损失过多信息。</li>
-<li><strong>长宽比</strong>：剔除极端长宽比的图片（如 &gt; 4:1 或 &lt; 1:4），它们通常是网页横幅或装饰性元素，信息量低。</li>
-<li><strong>文件大小/格式</strong>：剔除损坏的文件和过小的文件（如 &lt; 10KB）。</li>
+<li><strong>方法</strong>：计算每个图像文件的哈希值（如 SHA256）。哈希值完全相同的图像被认为是精确副本。</li>
+<li><strong>优点</strong>：速度快，准确率 100%。</li>
+<li><strong>缺点</strong>：无法识别那些经过轻微变换（如缩放、裁剪、亮度调整、格式转换）的副本。</li>
 </ul>
 </li>
 <li>
-<p><strong>内容安全与合规过滤 (Content Safety &amp; Compliance Filtering)</strong></p>
+<p><strong>近重/感知去重 (Near-Duplicate Detection)</strong>：</p>
 <ul>
-<li><strong>NSFW 检测</strong>：使用一个高效的预训练分类器（如基于 EfficientNet 的模型）对图片进行打分，过滤掉 NSFW (Not Safe For Work) 内容。设置一个保守的阈值。</li>
-<li><strong>水印检测</strong>：水印会引入噪声。可以使用基于频域分析（FFT）或专门训练的分类器来识别和过滤带明显水印的图片。</li>
+<li>
+<p><strong>方法一：感知哈希 (Perceptual Hashing)</strong></p>
+<ul>
+<li><strong>原理</strong>：如 pHash、dHash、aHash 等算法，它们将图片转换成一个简短的“指纹”（通常是 64 位或 256 位的哈希串）。这些算法的设计使得视觉上相似的图片会产生非常接近的哈希值（汉明距离很小）。</li>
+<li><strong>流程</strong>：计算所有图片的感知哈希值，然后在一个高效的查找结构中，找出汉明距离小于某个阈值（如 4-8）的图片对，只保留其中一张。</li>
+<li><strong>优点</strong>：计算速度较快，对旋转、缩放、水印等有一定鲁棒性。</li>
 </ul>
 </li>
 <li>
-<p><strong>近似去重 (Near-Duplicate Removal)</strong></p>
+<p><strong>法二：语义去重 (Semantic Deduplication)</strong></p>
 <ul>
-<li><strong>方法</strong>：使用感知哈希（Perceptual Hashing），如 <code>pHash</code> 或 <code>dHash</code>。它将图片转换成一个简短的哈希字符串，相似的图片会有相近的哈希值（汉明距离小）。</li>
-<li><strong>实现</strong>：<ol>
-<li>为每张图片计算 64-bit 的 pHash 值。</li>
-<li>将所有 pHash 值构建一个高效的索引结构（如 VP-Tree 或存储在支持快速位运算查询的数据库中）。</li>
-<li>遍历所有图片，查询索引中是否存在汉明距离小于某个阈值（如 5）的邻居。如果存在，则只保留其中一张（通常是分辨率最高或质量分最高的）。</li>
+<li><strong>原理</strong>：利用 CLIP 或其他视觉编码器提取的特征向量 $v_I$。视觉上和语义上相似的图片，其特征向量在空间中的距离也会很近。</li>
+<li>
+<p><strong>流程</strong>：
+    a. 为数据集中所有图片提取特征向量。
+    b. 使用近似最近邻（ANN）索引库（如 FAISS, ScaNN）构建索引。
+    c. 对每个向量进行查询，找到余弦相似度高于某一极高阈值（如 &gt; 0.98）的所有近邻。
+    d. 将这些高度相似的图片视为一个簇，每个簇只保留一个代表（如质量最高的那个）。</p>
+</li>
+<li>
+<p><strong>优点</strong>：功能最强大，能识别出内容主体相同但拍摄角度、背景、风格略有不同的图片，实现语义级别的去重。</p>
+</li>
+<li><strong>缺点</strong>：计算成本最高，需要 GPU 进行特征提取和索引构建。</li>
+</ul>
+</li>
+</ul>
+</li>
 </ol>
-</li>
-<li><strong>Rule-of-Thumb</strong>: 对于十亿级别的图片库，这个过程需要分布式计算框架（如 Spark/Dask）来完成。</li>
-</ul>
-</li>
-<li>
-<p><strong>质量打分 (Quality Scoring)</strong></p>
-<ul>
-<li><strong>审美分 (Aesthetic Score)</strong>：训练或使用一个预训练的模型来预测图片的“美感”。这类模型通常在包含人类审美评分的数据集上训练，能有效过滤掉构图不佳、光线糟糕的图片。LAION-Aesthetics 是一个很好的起点。</li>
-<li><strong>清晰度分 (Sharpness Score)</strong>：使用如拉普拉斯算子方差（Variance of Laplacian）等经典计算机视觉方法快速评估图片是否模糊。</li>
-</ul>
-</li>
-<li>
-<p><strong>图文相关性打分 (Image-Text Relevance Scoring)</strong></p>
-<ul>
-<li>这是至关重要的一步，确保 <code>alt</code> 文本真正在描述图片内容。</li>
-<li><strong>方法</strong>：利用预训练的多模态模型，如 <strong>CLIP</strong>。</li>
-<li>
-<p><strong>公式</strong>：
-    $S_{relevance} = \frac{\text{CLIP.encode_image}(I) \cdot \text{CLIP.encode_text}(T)}{|\text{CLIP.encode_image}(I)| \cdot |\text{CLIP.encode_text}(T)|}$</p>
-</li>
-<li>
-<p><strong>实现</strong>：</p>
+<p><strong>生产级方案</strong>：通常采用组合策略。先用精确哈希去重，然后用感知哈希进行一轮粗筛，最后对高质量子集采用语义去重，以平衡效果与成本。</p>
+<h2 id="75-dvaevqganvq-vae">7.5 离散化：dVAE/VQGAN/VQ-VAE</h2>
+<p>这是将图像数据喂给自回归模型的“最后一公里”。我们的目标是将一张 <code>H x W x 3</code> 的图片，转换成一个一维的、长度为 <code>N</code> 的离散 token 序列。这背后最主流的技术是基于向量量化（Vector Quantization）的自编码器。</p>
+<p><strong>核心思想</strong>：</p>
 <ol>
-<li>将图片和其对应的 <code>alt</code> 文本分别送入 CLIP 的图像编码器和文本编码器，得到嵌入向量。</li>
-<li>计算两个向量的余弦相似度。</li>
+<li><strong>编码器 (Encoder)</strong>：一个卷积神经网络（CNN），将输入图像（如 <code>256x256x3</code>）下采样到一个较小的特征图（如 <code>16x16x256</code>）。这个特征图的每个“像素”都是一个描述对应图像块（Patch）的特征向量。</li>
+<li><strong>码本 (Codebook)</strong>：一个可学习的“视觉词典”，包含 <code>K</code> 个向量（例如 <code>K=8192</code>），每个向量 $c_k$ 称为一个 code。</li>
+<li><strong>量化 (Quantization)</strong>：对于编码器输出的 <code>16x16</code> 个特征向量中的每一个，我们都在码本中找到距离它最近的那个 code $c_k$，并用这个 code 的<strong>索引</strong> <code>k</code> 来替代它。这个索引 <code>k</code> 就是我们的离散视觉 token。</li>
+<li><strong>展平 (Flatten)</strong>：将 <code>16x16</code> 的 token 索引网格展平成一个长度为 <code>256</code> 的序列。</li>
 </ol>
-</li>
-<li><strong>Rule-of-Thumb</strong>: 设置一个合理的值，例如 <strong>0.28</strong>。低于此分数的图文对很可能是不相关的（例如，<code>alt</code> 文本是 "logo" 或 "advertisement"），应被丢弃或降权。</li>
-</ul>
-</li>
-</ol>
-<p>经过上述流水线后，我们得到一个带有丰富元数据的、高质量的图文对清单。这些元数据（如 aesthetic_score, clip_score）可以在后续的数据采样阶段用作权重。</p>
-<h3 id="23-token-image-discretization">2.3 图像离散化：从像素到 Token (Image Discretization)</h3>
-<p>为了让 Transformer 能够像处理文本一样处理图像，我们需要将图像“翻译”成一个离散的 token 序列。我们采用 <strong>VQ-VAE (Vector Quantized-Variational AutoEncoder)</strong> 或其变体（如 VQGAN, dVAE）来实现这一目标。</p>
-<p><strong>核心思想</strong>:</p>
-<ol>
-<li><strong>编码 (Encoder)</strong>：一个卷积神经网络（CNN）将输入图像 $I \in \mathbb{R}^{H \times W \times C}$ 压缩成一个较低分辨率的特征图（latent map）$Z \in \mathbb{R}^{h \times w \times d}$。</li>
-<li><strong>量化 (Quantization)</strong>：这是关键步骤。我们维护一个可学习的“码本”（codebook）$C = \{c_1, c_2, ..., c_K\}$，其中每个 $c_i \in \mathbb{R}^d$ 是一个嵌入向量。对于 $Z$ 中的每一个 $d$ 维向量，我们找到码本中与之最接近的向量 $c_k$，并用其索引 $k$ 来代替。</li>
-<li><strong>解码 (Decoder)</strong>：一个转置卷积网络将量化后的特征图 $Z_q$ 重建回原始图像 $\hat{I}$。</li>
-</ol>
-<p>通过这个过程，一张 $256 \times 256$ 的图像，经过一个下采样率为 16 的编码器，会产生一个 $16 \times 16$ 的特征图。对这 $16 \times 16 = 256$ 个向量进行量化后，我们就得到一个由 256 个整数索引（token）组成的序列。</p>
-<p><strong>生产级方案</strong>:</p>
+<p><strong>ASCII 图解：VQ-VAE 离散化流程</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="n">Input</span><span class="w"> </span><span class="n">Image</span><span class="w">        </span><span class="n">Encoder</span><span class="w"> </span><span class="p">(</span><span class="n">CNN</span><span class="p">)</span><span class="w">      </span><span class="n">Latent</span><span class="w"> </span><span class="n">Grid</span><span class="w">        </span><span class="n">Quantization</span><span class="w"> </span><span class="p">(</span><span class="n">find</span><span class="w"> </span><span class="n">nearest</span><span class="w"> </span><span class="n">code</span><span class="p">)</span><span class="w">   </span><span class="kt">Token</span><span class="w"> </span><span class="n">Sequence</span>
+<span class="p">(</span><span class="mi">256</span><span class="n">x256x3</span><span class="p">)</span><span class="w">                             </span><span class="p">(</span><span class="mi">16</span><span class="n">x16</span><span class="p">)</span><span class="w">                                               </span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="o">+---------+</span><span class="w">         </span><span class="o">+-------+</span><span class="w">          </span><span class="o">+---+---+</span><span class="w">          </span><span class="o">+----------+</span><span class="w">  </span><span class="p">(</span><span class="n">Codebook</span><span class="p">)</span><span class="w">           </span><span class="p">[</span><span class="mi">102</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">8100</span><span class="p">,</span><span class="w"> </span><span class="p">...]</span>
+<span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w"> </span><span class="o">--</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">--&gt;|</span><span class="w"> </span><span class="n">CNN</span><span class="w">   </span><span class="o">|</span><span class="w"> </span><span class="o">--</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">--&gt;</span><span class="w"> </span><span class="o">|</span><span class="n">v1</span><span class="w"> </span><span class="o">|</span><span class="n">v2</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="o">--&gt;</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="n">c2</span><span class="p">,</span><span class="w">  </span><span class="o">|</span><span class="w"> </span><span class="o">--</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">--&gt;</span><span class="w"> </span><span class="nf">Index</span><span class="w"> </span><span class="n">Grid</span><span class="w"> </span><span class="o">--&gt;</span><span class="w"> </span><span class="p">[...,</span><span class="w"> </span><span class="mi">43</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span>
+<span class="o">|</span><span class="w">  </span><span class="n">Cat</span><span class="w">    </span><span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w"> </span><span class="n">Layers</span><span class="o">|</span><span class="w">          </span><span class="o">+---+---+</span><span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="p">...,</span><span class="w"> </span><span class="n">ck</span><span class="p">,</span><span class="w"> </span><span class="o">|</span><span class="w">      </span><span class="p">(</span><span class="mi">16</span><span class="n">x16</span><span class="p">)</span><span class="w">              </span><span class="o">|</span>
+<span class="o">|</span><span class="w">         </span><span class="o">|</span><span class="w">         </span><span class="o">+-------+</span><span class="w">          </span><span class="o">|</span><span class="p">...</span><span class="o">|</span><span class="p">...</span><span class="o">|</span><span class="w">          </span><span class="o">+----------+</span><span class="w">          </span><span class="o">|</span><span class="w">               </span><span class="o">|</span>
+<span class="o">+---------+</span><span class="w">                            </span><span class="o">+---+---+</span><span class="w">                              </span><span class="o">|--</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="w"> </span><span class="n">Flatten</span><span class="o">--+</span>
+</code></pre></div>
+
+<p><strong>关键参数与权衡</strong>：</p>
 <ul>
-<li><strong>选择预训练的 VQ-VAE</strong>：从头训练一个高质量的 VQ-VAE 代价高昂。强烈建议使用一个在海量、多样化数据上预训练好的、公开发布的 VQ-VAE 模型（如 OpenAI 的 dVAE 或 Stability AI 的 VAE）。这能确保离散化的质量和泛化能力。</li>
-<li><strong>离散化流程</strong>:<ol>
-<li>加载预训练的 VQ-VAE 模型。</li>
-<li>对于质量过滤后的每一张图片，进行预处理（resize到 $256 \times 256$ 或 $384 \times 384$，归一化）。</li>
-<li>将图片送入 VQ-VAE 的编码器和量化层，获取 $16 \times 16$ 的 token 索引矩阵。</li>
-<li>将该矩阵展平（flatten）为一个长度为 256 的 token 序列。</li>
-<li>将这个序列与图片的元数据、<code>alt</code> 文本一同存储。</li>
-</ol>
-</li>
-<li><strong>参数配置 Rule-of-Thumb</strong>:<ul>
-<li><strong>输入分辨率</strong>: $256 \times 256$。</li>
-<li><strong>下采样因子 (Downsampling Factor)</strong>: 16。</li>
-<li><strong>码本大小 (Codebook Size)</strong>: 8192 或 16384。</li>
-<li><strong>输出序列长度</strong>: $ (256/16) \times (256/16) = 16 \times 16 = 256 $ tokens。</li>
+<li><strong>码本大小 (K)</strong>：决定了“视觉词汇”的丰富程度。通常在 4096 到 16384 之间。K 越大，重建图像的保真度越高，但增加了模型词表的负担。</li>
+<li><strong>下采样率</strong>：决定了最终 token 序列的长度。例如，对于 <code>256x256</code> 的图像，16x 的下采样率（即 patch size 为 16x16）会产生 <code>(256/16) * (256/16) = 16 * 16 = 256</code> 个 token。这是目前比较主流的配置。</li>
+</ul>
+<p><strong>生产级选择</strong>：</p>
+<ul>
+<li>可以直接使用业界开源的、高质量的 VQGAN 或 VQ-VAE 的编码器和码本（如 Stable Diffusion 使用的 VAE Encoder，或 Google 的 SoundStream/ViT-VQGAN）。</li>
+<li>也可以在自己的高质量图像数据上重新训练一个 VQ-VAE，以使其码本更适应特定领域。</li>
+</ul>
+<h2 id="76-token">7.6 Token 预算、分辨率与裁切策略</h2>
+<p><strong>Token 预算</strong>：
+在总计 30T token 的训练数据中，图像 token 通常占 10-20% 的比例，即 3T 到 6T tokens。假设平均每张图产生 256 个 token，这意味着我们需要大约 120 亿到 240 亿张高质量的图文对样本。这再次凸显了复用 LAION 等大型开源数据集的重要性。</p>
+<p><strong>分辨率 (Resolution)</strong>：</p>
+<ul>
+<li><strong>1B 模型</strong>：可以从较低分辨率开始，如 <code>224x224</code> 或 <code>256x256</code>。这能有效控制序列长度和计算成本。</li>
+<li><strong>10B 模型</strong>：可以支持更高分辨率，如 <code>336x336</code> 或 <code>448x448</code>。更高的分辨率能让模型看清更多细节，对于 OCR、细粒度识别等任务至关重要。需要注意的是，<code>448x448</code> 的图像在 16x下采样率下会产生 <code>(448/16)^2 = 28*28 = 784</code> 个 token，序列长度显著增加。</li>
+</ul>
+<p><strong>裁切策略 (Cropping Strategy)</strong>：</p>
+<ul>
+<li><strong>训练时</strong>：对于非正方形的图像，通常采用<strong>随机裁切</strong>（Random Cropping）到目标分辨率。这是一种有效的数据增强手段，能提高模型的泛化能力。</li>
+<li><strong>推理时</strong>：通常采用<strong>中心裁切</strong>（Center Cropping）或将图像缩放后用 padding 补齐（Letterboxing），以保留最核心的视觉信息。</li>
+</ul>
+<h2 id="77">7.7 数据卡与版权标注</h2>
+<p>对于一负责任的大模型项目，追踪数据来源和处理过程至关重要。</p>
+<ul>
+<li>
+<p><strong>数据卡 (Data Card)</strong>：为每个最终进入训练集的数据点（或其所属的数据集）维护一份元数据记录。内容应包括：</p>
+<ul>
+<li>原始来源 URL。</li>
+<li>许可证信息（如 Creative Commons, Public Domain 等）。</li>
+<li>各阶段的质量分数（CLIP Score, Aesthetic Score, NSFW Score）。</li>
+<li>应用的变换（分辨率、裁切方式）。</li>
+<li>所属的数据集批次和版本。</li>
 </ul>
 </li>
+<li>
+<p><strong>版权标注</strong>：严格遵守数据源的 <code>robots.txt</code> 和服务条款（TOS）。对于有明确版权限制或权利人要求移除的数据，必须建立快速响应和追溯下架的机制。这是项目合规性的生命线。</p>
+</li>
 </ul>
-<p>最终，我们原始的图像数据集被转换成了一个大规模的、由整数序列构成的数据集，可以被主模型直接消费。</p>
-<h2 id="3">3. 本章小结</h2>
-<p>本章详细介绍了构建生产级图像数据集的完整流程，将抽象的目标（1.0T token）分解为具体可执行的步骤。</p>
-<ol>
-<li><strong>数据采集</strong>：们采用混合策略，结合大规模自建网页抓取（追求广度）和高质量精选集（追求深度），并始终强调合规性。</li>
-<li><strong>质量控制</strong>：建立了一个五阶段的过滤与打分流水线，是确保数据质量的核心。关键技术包括<strong>感知哈希去重</strong>和<strong>基于 CLIP 的图文相关性打分</strong>，它们是决定模型最终性能的关键。</li>
-<li><strong>统一离散化</strong>：通过使用预训练的 <strong>VQ-VAE</strong>，我们将连续的图像数据转换成了与文本兼容的<strong>离散 token 序列</strong>（每张图 256 个 token），为后续的多模态融合训练铺平了道路。</li>
-</ol>
-<p>下表总结了本章的核心流水线与关键参数：</p>
-<p>| 阶段           | 核心任务                                     | 关键技术/工具                       | Rule-of-Thumb / 输出                      |</p>
-<table>
-<thead>
-<tr>
-<th>阶段</th>
-<th>核心任务</th>
-<th>关键技术/工具</th>
-<th>Rule-of-Thumb / 输出</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>采集</strong></td>
-<td>获取原始图文对</td>
-<td>Common Crawl, <code>aiohttp</code>, <code>selectolax</code></td>
-<td>遵守 <code>robots.txt</code>，存储原始 URL</td>
-</tr>
-<tr>
-<td><strong>质量过滤</strong></td>
-<td>清洗、去重、打分</td>
-<td>NSFW-Classifier, pHash, CLIP</td>
-<td>CLIP Score &gt; 0.28, pHash Hamming Dist &lt; 5</td>
-</tr>
-<tr>
-<td><strong>离散化</strong></td>
-<td>将图像转换为 token 序列</td>
-<td>预训练的 VQ-VAE/VQGAN</td>
-<td>$256 \times 256 \to 16 \times 16 = 256$ tokens/图</td>
-</tr>
-</tbody>
-</table>
-<p>现在，我们拥有了高质量、格式统一的图像 token，准备好在下一章与其它模态的 token 进行融合了。</p>
-<h2 id="4-gotchas">4. 常见陷阱与错误 (Gotchas)</h2>
+<h2 id="78">7.8 本章小结</h2>
+<p>本章系统地介绍了将原始图像数据转化为模型可用的离散 token 序列的全过程。我们从确保图文相关性的 CLIP Score 过滤开始，接着利用一系列小模型对图像进行美学、安全、原创性等多度的质量评估。随后，我们讨论了如何通过感知哈希和语义向量两种手段进行高效的近重去重。核心步骤是将清理后的图像通过 VQ-VAE 等模型离散化为 token 序列。最后，我们明确了 token 预算、分辨率选择、裁切策略以及数据溯源的重要性。这一套完整的流水线是保障多模态模型视觉能力的基础。</p>
+<h2 id="79-gotchas">7.9 常见陷阱与错误 (Gotchas)</h2>
 <ol>
 <li>
-<p><strong>陷阱：数据越多越好，忽视质量。</strong></p>
+<p><strong>过度依赖单一质量指标</strong>：</p>
 <ul>
-<li><strong>后果</strong>：模型花费大量时间学习噪声，导致生成结果模糊、文不对题，或者充满水印。</li>
-<li><strong>调试与避免</strong>：严格执行质量过滤流水线。在训练初期，可以先用一小部分得分最高（如 CLIP score &gt; 0.35, aesthetic score &gt; 6.0）的数据进行试验，建立一个高质量的性能基线。</li>
+<li><strong>陷阱</strong>：仅使用 CLIP score 过滤，忽略了图像本身的美学和清晰度，可能导致模型学会将高质量文本与低质量、模糊的图像关联起来。</li>
+<li><strong>调试</strong>：在数据预处理的每个阶段都进行抽样和人工检查。建立一个数据可视化工具，快速浏览被过滤掉或被保留的样本，以校准各个打分模型的阈值。</li>
 </ul>
 </li>
 <li>
-<p><strong>陷阱：文本描述质量被忽略。</strong></p>
+<p><strong>离散化模型领域不匹配</strong>：</p>
 <ul>
-<li><strong>后果</strong>：<code>alt</code> 文本常常是 "image", "logo", "1.jpg" 或者 SEO 关键词堆砌。这会严重毒害模型的图文对齐能力。</li>
-<li><strong>调试与避免</strong>：CLIP score 是对抗此问题的利器。定期抽样检查低 CLIP score 的样本，分析 <code>alt</code> 文本的常见问题，甚至可以训练一个“垃圾文本”分类器来辅助过滤。</li>
+<li><strong>陷阱</strong>：使用一个在通用网页图片上预训练的 VQ-VAE，去处理一个特定领域如医学影像、动漫）的数据集。这会导致重建效果差，产生的视觉 token 无法捕捉领域内的关键特征（码本“词不达意”）。</li>
+<li><strong>调试</strong>：在目标领域的一小部分数据上，评估 VQ-VAE 的重建损失和视觉效果。如果效果不佳，考虑在该领域数据上微调 VQ-VAE，甚至重新训练。</li>
 </ul>
 </li>
 <li>
-<p><strong>陷阱：近似重复内容泛滥。</strong></p>
+<p><strong>忽视存储和 IO 成本</strong>：</p>
 <ul>
-<li><strong>后果</strong>：模型对某些常见图像（如名人、logo、meme）过拟合，在评测集上造成虚高的性能，但泛化能力差。</li>
-<li><strong>调试与避免</strong>：必须执行严格的基于感知哈希的近似去重。在评测集构建时，也要用同样的方法确保训练集与评测集之间没有近似重复。</li>
+<li><strong>陷阱</strong>：为每张图片存储原始文件、多种分辨率的副本、CLIP 特征向量、以及最终的 token 序列，导致存储成本爆炸。</li>
+<li><strong>调试</strong>：制定清晰的数据生命周期管理策略。例如，特征向量和 token 序列一旦生成并验证，原始的高清图像可以归档到成本更低的冷存储。在训练时，使用 WebDataset 等格式直接从对象存储流式读取 tokenized 数据，避免在训练集群的本地磁盘上缓存海量文件。</li>
 </ul>
 </li>
 <li>
-<p><strong>陷阱：从零开始训练 VQ-VAE。</strong></p>
+<p><strong>文本-图像数据泄漏</strong>：</p>
 <ul>
-<li><strong>后果</strong>：耗费大量算力，且训练不当的 VQ-VAE 会导致重建图像质量差（离散化损失信息过多），成为整个模型性能的瓶颈。</li>
-<li><strong>调试与避免</strong>：除非有特殊需求和充足算力，否则优先使用社区公认的高质量预训练 VQ-VAE。将精力集中在数据质量和主模型的训练上。</li>
+<li><strong>陷阱</strong>：图像中包含的文字（如截图、海报）可能与评测集中的文本高度重合，导致模型在 OCR 或相关问答任务上表现虚高。这是一种隐蔽的数据泄漏。</li>
+<li><strong>调试</strong>：在构建评测集时，要特别注意这一点。可以对评测集图像运行 OCR，将其中的文本与训练集的文本语料进行 n-gram 或其他近重检测，筛除潜在的泄漏样本。</li>
 </ul>
 </li>
 <li>
-<p><strong>陷阱：存储管理混乱。</strong></p>
+<p><strong>去重阈值设置不当</strong>：</p>
 <ul>
-<li><strong>后果</strong>：数十亿张图片的原始文件会轻易撑爆存储，管理成本高昂。</li>
-<li><strong>调试与避免</strong>：设计一个清晰的存储策略。例如：<code>原始图片 (S3) -&gt; [处理] -&gt; 离散化 token + 元数据 (Parquet/Arrow on S3) -&gt; 删除原始图片 (或归档到低成本存储)</code>。只保留 token 和必要的元数据用于训练，能极大降低存储和 I/O 成本。</li>
+<li><strong>陷阱</strong>：感知哈希或语义去重的阈值设得太宽松，导致许多视觉上不同但主题相似的图片被错误地删除，损害了数据的多样性。设得太严格，则去重效果不佳。</li>
+<li><strong>调试</strong>：这是一个需要反复实验和人工评估的过程。随机抽取一些被判定为“重复”的簇，人工检查其内部相似度是否确实过高。目标是在保留多样性（如不同角度的同一地标）和去除冗余（如完全相同的 meme 图）之间找到平衡。</li>
 </ul>
 </li>
 </ol>
             </article>
             
-            <nav class="page-nav"><a href="chapter6.html" class="nav-link prev">← 第 6 章 — 视频数据：合规抓取、切片与时空离散化</a><a href="chapter8.html" class="nav-link next">第八章：Tokenizer 与词表：多模扩词、特殊符与对齐标注 →</a></nav>
+            <nav class="page-nav"><a href="chapter6.html" class="nav-link prev">← 第 6 章 — 视频数据：合规抓取、切片与时空离散化</a><a href="chapter8.html" class="nav-link next">Tokenizer 与词表：多模扩词、特殊符与对齐 →</a></nav>
         </main>
     </div>
 </body>

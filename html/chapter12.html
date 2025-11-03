@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第十二章：监控与可观测性</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">index.md（导读与目录）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Chapter 1: 总览与技术路线</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">项目管理与里程碑</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第三章：数据配方设计（100T token 池）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 4 章 文本数据：抓取、清洗、去重与质量分层</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 5 章 — 音频数据：合规抓取、ASR 对齐、RVQ 离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 6 章 — 视频数据：合规抓取、切片与时空离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 7 章 — 图像数据：采集、质量打分与离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Tokenizer 与词表：多模扩词、特殊符与对齐</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">模型结构与超参数（1B/10B）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十章：训练基础设施（Megatron @ 256×H100）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 11 章：数据混采与课程策略（10T token 单轮）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十二章：监控与可观测性</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十三章 评测体系：从自回归困惑度到视觉语言指标</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十四章：安全与合规</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="_1">第十二章：监控与可观测性</h1>
+<h2 id="121">12.1 开篇与学习目标</h2>
+<p>训练一个处理数万亿 token、耗资数百万美元的多模态大模型，如同驾驶一艘在未知海域中航行的巨轮。没有仪表盘和雷达，任何微小的偏差都可能导致灾难性的后果——训练崩溃、资源浪费，甚至最终产出一个性能低下的模型。本章将详细介绍如何为这艘“巨轮”构建一套全面的监控与可观测性（Observability）系统。这不仅是关于“看到”发生了什么，更是关于“理解”为什么会发生。</p>
+<p>本章的学习目标包括：</p>
+<ul>
+<li><strong>构建训练侧监控体系</strong>：掌握监控训练吞吐、稳定性和资源利用率的核心指标。</li>
+<li><strong>建立数据侧可观测性</strong>：学会追踪流入模型的实际数据分布，确保其符合预期配方。</li>
+<li><strong>监控多模态离散化流水线</strong>：理解如何监控 RVQ 码本等特有多模态组件的健康度。</li>
+<li><strong>设计告警与回滚策略</strong>：学习如何建立自动化的“熔断”机制，以应对训练过程中的各种异常。</li>
+<li><strong>实施自动评测与回归检测</strong>：确保模型在学习过程中能力持续提升，而不是意外退化。</li>
+</ul>
+<h2 id="122">12.2 训练侧指标：吞吐、稳定性、损失、显存/通信</h2>
+<p>训练集群是整个项目的引擎室，其运行状态直接决定了项目的进度和成本。我们需要从性能、稳定性和资源利用率三个维度来监控它。</p>
+<h3 id="throughput">性能与吞吐量 (Throughput)</h3>
+<p>这些指标是衡量“烧卡”效率的核心。</p>
+<ul>
+<li><strong>模型浮点运算利用率 (Model FLOPs Utilization, MFU)</strong>：衡量 GPU 实际用于模型计算的有效 TFLOPS 与理论峰值 TFLOPS 的比率。这是最重要的效率指标。<ul>
+<li><strong>经验法则</strong>：对于 H100 集群，在 FP8/BF16 混合精度下，一个优化良好的训练任务 MFU <strong>应高于 50%</strong>。低于 30% 通常意味着存严重的瓶颈（IO、通信或计算实现）。</li>
+</ul>
+</li>
+<li><strong>端到端吞吐量 (Samples/sec or Tokens/sec)</strong>：从工程师角度看，这是最直观的进度指标。它直接关联到“跑完 10T token 需要多久”。</li>
+<li><strong>迭代时间 (Step Time)</strong>：单次 forward-backward-optimizer step 的耗时。分析其 P50, P90, P99 延迟，可以帮助定位长尾迭代，发现偶发的性能抖动。</li>
+</ul>
+<h3 id="stability">稳定性 (Stability)</h3>
+<p>这些指标是模型的“心电图”，反映了训练过程的健康状况。</p>
+<ul>
+<li><strong>损失函数值 (Loss)</strong>：<strong>最关键的指标</strong>。<ul>
+<li><strong>整体趋势</strong>：应平滑下降。长期停滞或上升是严重警报。</li>
+<li><strong>尖峰 (Spikes)</strong>：偶尔的损失尖峰可能是由脏数据或数值不稳定引起的。频繁的尖峰则预示着需要调整学习率、梯度裁剪或数据清洗策略。</li>
+<li><strong>NaN / Inf</strong>：灾难性信号，训练已发散。必须立即暂停并排查。</li>
+</ul>
+</li>
+<li><strong>梯度范数 (Gradient Norm)</strong>：在梯度裁剪（Gradient Clipping）前，监控全局梯度的 L2 范数。剧烈波动或持续增长的梯度范数是数值不稳定的前兆。</li>
+<li><strong>学习率 (Learning Rate)</strong>：确认学习率调度器（如 warmup, cosine decay）是否按预期工作。</li>
+</ul>
+<h3 id="resource-utilization">资源利用率 (Resource Utilization)</h3>
+<p>这些指标帮助我们发现资源瓶颈和优化成本。</p>
+<ul>
+<li><strong>GPU 显存占用</strong>：监控激活（Activations）、模型参数（Parameters）、优化器状态（Optimizer States）和 KV Cache（如果在线评测）的显存分配。意外的显存增长可能意味着内存泄漏。</li>
+<li><strong>GPU 利用率 (%)</strong>：衡量 GPU 计算核心的繁忙程度。持续低于 95% 可能表示 CPU 瓶颈、IO 等待或通信阻塞。</li>
+<li><strong>通信带宽 (Communication Bandwidth)</strong>：<ul>
+<li><strong>节点内 (Intra-node)</strong>：监控 NVLink/NVSwitch 的带宽利用率，对于 Tensor Parallelism (TP) 和 Pipeline Parallelism (PP) 至关重要。</li>
+<li><strong>节点间 (Inter-node)</strong>：监控 InfiniBand/RoCE 网卡的带宽利用率，对于 Data Parallelism (DP) 和全量参数优化器（如 ZeRO）的 AllReduce 操作至关重要。</li>
+</ul>
+</li>
+</ul>
+<p>一个典型的训练监控仪表盘（Dashboard）可能如下所示：</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">+---------------------------------------------------------------------------------+</span>
+<span class="c">| </span><span class="k">[</span><span class="c">Training Job: mm</span><span class="nb">-</span><span class="c">model</span><span class="nb">-</span><span class="c">10b</span><span class="nb">-</span><span class="c">run</span><span class="nb">-</span><span class="c">01</span><span class="k">]</span><span class="c"> </span><span class="k">[</span><span class="c">Time: 2024</span><span class="nb">-</span><span class="c">10</span><span class="nb">-</span><span class="c">26 10:00:00</span><span class="k">]</span><span class="c">                 |</span>
+<span class="nb">+------------------------------------+--------------------------------------------+</span>
+<span class="c">| Overall Loss (Log Scale)           | MFU &amp; Throughput (Tokens/sec)              |</span>
+<span class="c">|   \                              |   | MFU: 58% | Tokens/s: 3</span><span class="nt">.</span><span class="c">5M            |</span>
+<span class="c">|    \                             |  /|</span><span class="nb">--------------------------------------</span><span class="c">|</span>
+<span class="c">|     \                            | / |                                      |</span>
+<span class="c">|      &#39;</span><span class="nb">-</span><span class="nt">,,</span><span class="c">_                       |/  &#39;</span><span class="nb">-</span><span class="nt">,,</span><span class="c">_ (MFU)                           |</span>
+<span class="nb">+------------------------------------+--------------------------------------------+</span>
+<span class="c">| Gradient Norm (L2)                 | GPU Memory Usage (GB per GPU)              |</span>
+<span class="c">|       |                            |   </span><span class="nb">+------------------------------------+</span><span class="c">   |</span>
+<span class="c">|     </span><span class="nt">,.</span><span class="nb">-</span><span class="nt">.</span><span class="c">                           |   | Optimizer | Gradients | Activations|   |</span>
+<span class="c">|   </span><span class="nt">,</span><span class="c">&#39;    &#39;</span><span class="nb">-</span><span class="nt">,</span><span class="c">                        |   </span><span class="nb">+------------------------------------+</span><span class="c">   |</span>
+<span class="c">|</span><span class="nb">--</span><span class="c">&#39;</span><span class="nb">----------</span><span class="c">&#39;</span><span class="nb">--</span><span class="c">                    |   |        Model Parameters            |   |</span>
+<span class="nb">+------------------------------------+--------------------------------------------+</span>
+<span class="c">| Step Time (P99)                    | Inter</span><span class="nb">-</span><span class="c">node Network IO (GB/s)               |</span>
+<span class="c">|    | |  |                          |         </span><span class="nt">,.</span><span class="nb">-</span><span class="nt">.</span><span class="c">                               |</span>
+<span class="c">|   </span><span class="nb">-</span><span class="c">&#39;</span><span class="nb">-</span><span class="c">&#39;</span><span class="nb">--</span><span class="c">&#39;</span><span class="nb">-</span><span class="c">                         |       </span><span class="nt">,</span><span class="c">&#39;    &#39;</span><span class="nb">-</span><span class="nt">,</span><span class="c">                            |</span>
+<span class="c">|                                    |</span><span class="nb">------</span><span class="c">&#39;</span><span class="nb">----------</span><span class="c">&#39;</span><span class="nb">--------------------------</span><span class="c">|</span>
+<span class="nb">+---------------------------------------------------------------------------------+</span>
+</code></pre></div>
+
+<h2 id="123-pii">12.3 数据侧指标：覆盖度、重复率、PII/毒性率、语言/模态占比</h2>
+<p>“垃圾进，垃圾出。” 监控进入模型的数据流与监控训练本身同等重要。数据侧的可观测性确我们正在用“正确”的配方喂养模型。</p>
+<ul>
+<li><strong>模态与语言占比 (Modality/Language Ratio)</strong>：实时监控每个 batch 中，文本、图像、音频、视频 token 的实际比例，以及中/英/其他语种的比例。确保这个实际比例与我们在第三章设计的<strong>数据配方（Data Recipe）</strong>保持一致。任何显著的漂移都表明数据采样器（sampler）存在 bug。</li>
+<li><strong>数据源覆盖度 (Source Coverage)</strong>：监控来自不同数据集（如维基百科、书籍、YouTube 子集）的数据是否被均匀或按预期权重采样。避免模型在训练早期就“看遍”了某个小数据集。</li>
+<li>"<strong>新鲜度"与重复率 (Freshness &amp; Repetition Rate)</strong>：在数据流中采样，计算 n-gram 重复率或 MinHash/SimHash 碰撞率。如果重复率随时间推移而上升，说明数据去重不彻底，或者数据池正在被耗尽。</li>
+<li><strong>安全与合规指标 (Safety &amp; Compliance Metrics)</strong>：<ul>
+<li><strong>PII (个人身份信息) 检出率</strong>：用轻级规则或模型扫描采样数据，监控 PII 的出现频率。</li>
+<li><strong>毒性/偏见内容率</strong>：使用预训练的分类器对文本、音频或图像内容打分，监控不当内容的比例。这些指标的突然升高是数据污染的强烈信号。</li>
+</ul>
+</li>
+</ul>
+<h2 id="124-rvq">12.4 离散化流水线监控（码率、丢帧、RVQ 码本利用率）</h2>
+<p>对于音频、视频和图像，离散化是预处理的关键步骤。这个流水线的健康直接影响输入的质量。</p>
+<ul>
+<li><strong>RVQ 码本利用率/困惑度 (Codebook Utilization/Perplexity)</strong>：这是<strong>最重要的离散化指标</strong>。一个健康的 VQ/RVQ 码本，其码元（codes）应该被相对均匀地使用。<ul>
+<li><strong>监控指标</strong>：计算码本在一段时间内（如 1000 个样本）的困惑度（Perplexity）。</li>
+<li><strong>异常信号</strong>：如果困惑度极低（例如，总共 1024 个码元，困惑度只有 20），这被称为<strong>码本坍缩 (Codebook Collapse)</strong>。这意味着离散化器只能用极少数的模式来编码输入，严重失了信息，必须立即告警。</li>
+</ul>
+</li>
+<li><strong>重建误差 (Reconstruction Error)</strong>：监控原始信号（如音频波形、图像像素）与经过编码-解码（离散化-反离散化）后信号之间的差异（如 MSE）。误差突然增大说明离散化模型性能下降。</li>
+<li><strong>有效码率 (Effective Bitrate / Tokens per second)</strong>：监控音频/视频离散化后，每秒产生的 token 数量。这个值应该稳定在一个预期范围内。例如，音频目标是 50 tokens/秒，如果实际输出是 20 tokens/秒，可能意味着静音检测（VAD）过于激进，丢弃了过多内容。</li>
+<li><strong>流水线吞吐与错误率</strong>：监控离散化作业的处理速度（如 小时/TB）和失败率。</li>
+</ul>
+<h2 id="125">12.5 告警与回滚策略（数据/模型双向熔断）</h2>
+<p>监控的最终目的是行动。一个有效的告警和回滚策略是保障项目安全网。我们提倡<strong>双向熔断 (Dual Circuit Breaker)</strong> 机制。</p>
+<ol>
+<li>
+<p><strong>数据侧熔断 (Data-Side Circuit Breaker)</strong></p>
+<ul>
+<li><strong>触发条件</strong><ul>
+<li>输入数据流的模态/语言分布与配方偏差超过 10%。</li>
+<li>PII/毒性内容检出率超过预设阈值（例如，连续 10 个 batch 均高于 0.1%）。</li>
+<li>RVQ 码本困惑度低于警戒线（例如，低于码本大小的 5%）。</li>
+</ul>
+</li>
+<li><strong>行动</strong>：<strong>自动暂停数据预处理和采样流水线</strong>，阻止“毒数据”流入训练集群。同时发送高优告警给数据团队。</li>
+</ul>
+</li>
+<li>
+<p><strong>模型侧熔断 (Model-Side Circuit Breaker)</strong></p>
+<ul>
+<li><strong>触发条件</strong>：<ul>
+<li>损失出现 NaN/Inf。</li>
+<li>损失在 N 个 steps 内（如 100 steps）持续上升。</li>
+<li>MFU 连续 M 分钟（如 30 分钟）低于阈值（如 20%）。</li>
+<li>梯度范数持续性地超过一个巨大的阈值。</li>
+</ul>
+</li>
+<li><strong>行动</strong>：<strong>自动暂停训练任务</strong>，保存当前状态，并发送高优告警给模型和 Infra 团队。</li>
+</ul>
+</li>
+</ol>
+<p><strong>回滚策略 (Rollback Strategy)</strong>
+一旦熔断被触发，必须有清晰的预案：</p>
+<ol>
+<li><strong>隔离问题</strong>：根据告警息，定位是数据问题还是模型/系统问题。</li>
+<li><strong>回滚</strong>：恢复到最后一个健康的、经过验证的检查点 (Checkpoint)。</li>
+<li><strong>修复</strong>：数据团队清洗数据源，或模型团队调整超参数/代码。</li>
+<li><strong>验证</strong>：在小规模数据上试运行，确认问题已解决。</li>
+<li><strong>恢复</strong>：从健康检查点恢复大规模训练。</li>
+</ol>
+<h2 id="126">12.6 自动评测与回归检测</h2>
+<p>训练损失下降不完全等同于模型能力提升。我们需要定期的、自动化的评测来客观衡量模型。</p>
+<ul>
+<li><strong>在线验证集 (Online Validation Sets)</strong>：训练过程中，每隔 N 个 steps（例如 1000 steps），在几个小的、固定的、多模态验证集上计算困惑度（Perplexity）。这是最快的反馈回路。</li>
+<li><strong>离线标准评测 (Offline Standard Evaluation)</strong>：每隔 M 个 steps（例如 10000 steps），自动触发一个独立的评测任务。该任务加载最新的 checkpoint，在一系列标准 benchmark（见第 13 章）上运行评测。</li>
+<li><strong>回归检测 (Regression Detection)</strong>：<ul>
+<li><strong>核心思想</strong>：模型的性能在关键指标上应是单调递增的（或损失单调递减）。</li>
+<li><strong>实施</strong>：建立一个“黄金标准”评测集。如果最新 checkpoint 在该评测集上的分数<strong>显著低于</strong>前一个 checkpoint，系统应自动发出“性能回归”告警。这可能意味着模型学到了有害的模式，或者评测数据被污染。</li>
+<li><strong>看板</strong>：将所有关键评测指标随训练 steps 的变化绘制在同一个看板上，直观地监控模型能力的演进。</li>
+</ul>
+</li>
+</ul>
+<h2 id="127">12.7 本章小结</h2>
+<ul>
+<li><strong>监控是工程，可观测性是科学</strong>：我们不仅需要看到指标，还需要能够理解指标背后的因果关系。</li>
+<li><strong>分层监控</strong>：必须同时覆盖<strong>训练侧</strong>（效率与稳定性）、<strong>数据侧</strong>（质量与分布）和<strong>多模态组件</strong>（如离散化）。</li>
+<li><strong>双向熔断机制</strong>：数据侧和模型侧的自动熔断器是防止灾难性故障的关键，能有效减少资源浪。</li>
+<li><strong>自动化是关键</strong>：从指标收集、仪表盘生成到告警、评测和回归检测，整个流程必须高度自动化，以应对长达数月的训练周期。</li>
+<li><strong>指标关联分析</strong>：当问题发生时（如损失尖峰），真正的价值在于能够将不同层面的指标关联起来——是哪个数据 batch？哪台机器的网卡丢包？还是 RVQ 码本在那一刻崩溃了？</li>
+</ul>
+<h2 id="128-gotchas">12.8 常见陷阱与错误 (Gotchas)</h2>
+<ol>
+<li>
+<p><strong>告警疲劳 (Alert Fatigue)</strong>：</p>
+<ul>
+<li><strong>陷阱</strong>：对所有指标设置过于敏感的告警，导致工程师被无休止的低优先级警报淹没，最终忽略所有告警。</li>
+<li><strong>解法</strong>：只对真正需要立即人工介入的“灾难性”事件（如 NaN Loss、MFU 暴跌）设置高优告警。对于趋势性变化（如损失平缓）或警告，应记录在日志或发送到低优先级渠道。</li>
+</ul>
+</li>
+<li>
+<p><strong>只看平均值，忽视长尾 (Ignoring the Tail)</strong>：</p>
+<ul>
+<li><strong>陷阱</strong>：平均迭代时间看起来正常，但 P99 迭代时间极高，这可能意味着某些节点或数据样本导致了周期性的性能瓶颈。</li>
+<li><strong>解法</strong>：同时监控平均值、P90、P99 等分位数指标，特别是对于延迟和资源使用情况。</li>
+</ul>
+</li>
+<li>
+<p><strong>数据分布的“静默失败” (Silent Data Distribution Failure)</strong>：</p>
+<ul>
+<li><strong>陷阱</strong>：训练任务没有崩溃，损失也在下降，但由于数据采样器的 bug，模型在过去一周只看到了英文文本数据，完全没有学习其他模态。这是最隐蔽也最危险的错误之一。</li>
+<li><strong>解法</strong>：将数据侧的模态/语言/源分布监控视为与训练损失同等重要的一级指标，并设置漂移告警。</li>
+</ul>
+</li>
+<li>
+<p><strong>忽视离散化质量 (Neglecting Discretization Quality)</strong>：</p>
+<ul>
+<li><strong>陷阱</strong>：认为离散化是一次性的预处理，完成后就不再关注。当 RVQ 码本在使用过程中逐渐坍缩时，输入给大模型的已经是高度失真的信息，但训练循环本身不会报错。</li>
+<li><strong>解法</strong>：将 RVQ 码本困惑度等指标纳入实时监控体系，并与模型训练的主仪表盘并列展示。</li>
+</ul>
+</li>
+<li>
+<p><strong>评测集泄漏的错误信心 (False Confidence from Leaked Evaluation Sets)</strong>：</p>
+<ul>
+<li><strong>陷阱</strong>：自动化评测显示性能稳步提升，但实际上是因为评测集的数据（或其近亲）意外地混入了训练数据中，导致模型“记住”了答案。</li>
+<li><strong>解法</strong>：在评测流程中加入强制性的泄漏检测步骤（见第 13 章），确保评测的公正性。对评测分数的突发性、不合常理的跃升保持警惕。</li>
+</ul>
+</li>
+</ol>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter11.html" class="nav-link prev">← 第 11 章：数据混采与课程策略（10T token 单轮）</a><a href="chapter13.html" class="nav-link next">第十三章 评测体系：从自回归困惑度到视觉语言指标 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>

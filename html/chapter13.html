@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="./">
+    <title>第十三章 评测体系：从自回归困惑度到视觉语言指标</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/highlight.css">
+    <script src="assets/script.js" defer></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$']],
+                displayMath: [['$$', '$$']],
+                processEscapes: false,
+                packages: {'[+]': ['noerrors', 'ams']}
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            loader: {
+                load: ['[tex]/noerrors', '[tex]/ams']
+            }
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>目录</h3>
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
+            </div>
+            <div id="tree-container">
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">index.md（导读与目录）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Chapter 1: 总览与技术路线</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">项目管理与里程碑</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第三章：数据配方设计（100T token 池）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 4 章 文本数据：抓取、清洗、去重与质量分层</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 5 章 — 音频数据：合规抓取、ASR 对齐、RVQ 离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 6 章 — 视频数据：合规抓取、切片与时空离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 7 章 — 图像数据：采集、质量打分与离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Tokenizer 与词表：多模扩词、特殊符与对齐</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">模型结构与超参数（1B/10B）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十章：训练基础设施（Megatron @ 256×H100）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 11 章：数据混采与课程策略（10T token 单轮）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十二章：监控与可观测性</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十三章 评测体系：从自回归困惑度到视觉语言指标</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十四章：安全与合规</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </nav>
+        
+        <main class="content">
+            <article>
+                <h1 id="_1">第十三章 评测体系：从自回归困惑度到视觉语言指标</h1>
+<h2 id="131">13.1 开篇与学习目标</h2>
+<p>欢迎来到第十三章。在本章中，我们将深入探讨如何衡量一个生成理解一体多模态大模型的性能。如果说前面的章节是关于如何“建造”这艘巨轮，那么本章就是关于如何设计并使用它的“仪表盘”和“罗盘”。一个健全、全面、可靠的评测体系是整个预训练项目的“眼睛”，它不仅用于在终点判断模型的优劣，更在漫长的训练过程中持续指引方向、暴露问题、验证假设。</p>
+<p>本章的目标是让您掌握一套适用于大规模多模态预训练的端到端评测方法论。我们将从最基础的内在指标（Intrinsic Evaluation）——自回归困惑度（Autoregressive Perplexity）入手，并将其扩展到文本、音频、视频等多种模态。随后，我们将转向更贴近实际应用外在指标（Extrinsic Evaluation），重点关注视觉-语言（Vision-Language）的下游任务。最后，我们将讨论评测体系中至关重要的两个“支柱”：数据泄漏检测和统计显著性分析，确保我们的评测结果真实可信。</p>
+<p><strong>学习目标：</strong></p>
+<ol>
+<li>理解并能实现文本、音频、视频的自回归困惑度计算方法。</li>
+<li>熟悉主流的视觉-语言下游评测任务及其核心指标。</li>
+<li>掌握数据泄漏检测的原理与实操方法，确保评测的公正性。</li>
+<li>学会使用统计工具判断模型性能差异的显著性，避免被随机波动误导。</li>
+<li>构建一个多维度、分层次的评测仪表盘，为模型训练提供持续、有效的反馈。</li>
+</ol>
+<hr />
+<h2 id="132">13.2 文本自回归困惑度（分域/分语种）</h2>
+<p>文本困惑度（Perplexity, PPL）是衡量语言模型性能最核心、最经典的内在指标。它直观地反映了模型对下一词元（token）预测的不确定性。一个好的语言模型应该能够为一个合语法和语义的句子赋予高概率，从而得到低的困惑度。</p>
+<ol>
+<li><strong>定义与计算</strong></li>
+</ol>
+<p>对于一个长度为 $N$ 的词元序列 $X = (x_1, x_2, ..., x_N)$，其困惑度 PPL 定义为模型在该序列上平均负对数似然（Negative Log-Likelihood, NLL）的指数：</p>
+<p>$$
+\text{PPL}(X) = \exp\left\{ -\frac{1}{N} \sum_{i=1}^N \log p(x_i | x_{&lt;i}; \theta) \right\} = \exp(\text{CrossEntropyLoss})
+$$</p>
+<p>其中，$p(x_i | x_{&lt;i}; \theta)$ 是模型 $\theta$ 在给定前文 $x_{&lt;i}$ 的条件下，预测出词元 $x_i$ 的概率。这个公式与交叉熵损失（Cross-Entropy Loss）直接相关，因此我们可以在验证集上通过计算损失来监控困惑度。PPL 的值越低，表示模型对文本序列的预测能力越强。</p>
+<ol start="2">
+<li><strong>分域与分语种评测的重要性</strong></li>
+</ol>
+<p>一个单一的、全局的 PPL 值往往会掩盖模型在不同数据分布上的性能差异。我们的训练数据是多语言、多领域的混合体，因此评测也必须是细粒度的。</p>
+<ul>
+<li>
+<p><strong>分语种By Language）</strong>：</p>
+<ul>
+<li>为中文、英文、以及我们关注的其他小语种（如日语、代码）分别建立高质量的、独立的评测集。</li>
+<li>这有助于我们判断模型是否在某种语言上“偏科”，或者某种语言的数据质量/数量是否存在问题。例如，如果中文 PPL 远高于英文 PPL，可能意味着中文训练数据需要加强。</li>
+</ul>
+</li>
+<li>
+<p><strong>分领域（By Domain）</strong>：</p>
+<ul>
+<li>在同一语言下，进一步细分领域，如：维基百科、学术论文、新闻、代码、社交媒体文本等。</li>
+<li>这能揭示模型的“知识盲区”或“能力偏好”。例如，模型可能在维基百科这种正式文体上 PPL 很低，但在充满口语和俚语的社交媒体文本上 PPL 很高。</li>
+</ul>
+</li>
+</ul>
+<p><strong>ASCII 图：分层评测仪表盘</strong></p>
+<div class="codehilite"><pre><span></span><code><span class="nb">+-------------------------------------------------+</span>
+<span class="c">|               Overall Perplexity                |</span>
+<span class="c">|                      12</span><span class="nt">.</span><span class="c">5                       |</span>
+<span class="nb">+-------------------------------------------------+</span>
+<span class="c">|           |             Language              |</span>
+<span class="c">|           </span><span class="nb">+-------------------+-----------------+</span>
+<span class="c">|           |      Chinese      |     English     |</span>
+<span class="c">|           |       11</span><span class="nt">.</span><span class="c">8        |      13</span><span class="nt">.</span><span class="c">2       |</span>
+<span class="nb">+-----------+-------------------+-----------------+</span>
+<span class="c">|   Domain  |                   |                 |</span>
+<span class="nb">+-----------+-------------------+-----------------+</span>
+<span class="c">| Wikipedia |        8</span><span class="nt">.</span><span class="c">9        |       9</span><span class="nt">.</span><span class="c">5       |</span>
+<span class="nb">+-----------+-------------------+-----------------+</span>
+<span class="c">|   Code    |       15</span><span class="nt">.</span><span class="c">2        |      16</span><span class="nt">.</span><span class="c">1       |</span>
+<span class="nb">+-----------+-------------------+-----------------+</span>
+<span class="c">|   News    |       10</span><span class="nt">.</span><span class="c">5        |      11</span><span class="nt">.</span><span class="c">3       |</span>
+<span class="nb">+-----------+-------------------+-----------------+</span>
+</code></pre></div>
+
+<p>通过这样的分层评测，我们可以清晰地看到模型的强项和弱项，为后续的数据配方调整和模型迭代提供精确制导。</p>
+<p><strong>Rule-of-Thumb:</strong></p>
+<ul>
+<li>评测集必须与训练集完全分离，且经过严格的去重和清洗。</li>
+<li>PPL 对文本预处理和 Tokenizer 非常敏感。比较不同模型的 PPL 时，必须确保使用了完全相同的评测集和 Tokenizer。</li>
+<li>在训练过程中，定期（例如每 100B token）在验证集上计算 PPL，绘制损失曲线和 PPL 曲线，是监控训练健康度的关键。</li>
+</ul>
+<hr />
+<h2 id="133">13.3 音频自回归困惑度</h2>
+<p>对于离散化的音频数据，我们同样可以计算自回归困惑度。由于音频被 RVQ 编码为一系列离散的声学词元（acoustic token），其计算原理与文本 PPL 完全一致。然而，解读音频 PPL 需要一些额外的视角。</p>
+<ol>
+<li><strong>计算与归一化</strong></li>
+</ol>
+<p>与文本类似，我们计算音频词元序列的交叉熵损失，然后取指数得到 PPL。
+$$
+\text{PPL}_{\text{audio}} = \exp(\text{CrossEntropyLoss}_{\text{audio_tokens}})
+$$</p>
+<ol start="2">
+<li><strong>与“每秒比特数”（Bits Per Second）的关联</strong></li>
+</ol>
+<p>单独的音频 PPL 数值不够直观。一个更有物理意义的指标是“每秒比特数”（Bits per second, BPS），它衡量了模型压缩音频信息的有效程度。我们可以通过以下公式将其与交叉损失关联起来：</p>
+<p>$$
+\text{Bits per token} = \frac{\text{CrossEntropyLoss}}{\ln(2)}
+$$
+$$
+\text{BPS} = (\text{Bits per token}) \times (\text{Tokens per second})
+$$</p>
+<p>其中，“Tokens per second”是由我们的音频离散化模型（如 Encodec）决定的固定参数（例如，50 Hz 或 75 Hz）。</p>
+<p><strong>示例：</strong></p>
+<ul>
+<li>假设我们的 Encodec 模型每秒产生 75 个 token。</li>
+<li>模型在验证集上的平均交叉熵损失为 3.5。</li>
+<li>Bits per token = 3.5 / ln(2) ≈ 5.05 bits/token。</li>
+<li>BPS = 5.05 bits/token * 75 tokens/sec ≈ 378.75 BPS。</li>
+</ul>
+<p>这个 BPS 值可以与传统的音频编解码器（如 MP3, AAC）的码率进行粗略类比，为我们提供一个关于模型生成音频质量和压缩效率的直观感受。训练的目标就是不断降低这个 BPS 值。</p>
+<p><strong>Rule-of-Thumb:</strong></p>
+<ul>
+<li>由于音频 PPL 是一个较新的指标，其绝对值的“好坏”缺乏业界公认标准。因此，更重要的是跟踪其在训练过程中的<strong>相对下降趋势</strong>。</li>
+<li>同样需要建分域的音频评测集，例如：纯净人声（有声书）、带背景音的对话（播客）、嘈杂环境下的语音（YouTube Vlog）等，以评估模型的鲁棒性。</li>
+</ul>
+<hr />
+<h2 id="134">13.4 视频自回归困惑度</h2>
+<p>视频的评测与音频类似，但更为复杂，因为它同时包含了时空两个维度。在我们的框架中，视频被离散化为时空词元（spatio-temporal tokens）序列，因此我们依然可以计算其自回归困惑度。</p>
+<ol>
+<li><strong>计算与归一化</strong></li>
+</ol>
+<p>模型预测下一个时空块（tubelet）的离散 token 的能力，可以用 PPL 来衡量。
+$$
+\text{PPL}_{\text{video}} = \exp(\text{CrossEntropyLoss}_{\text{video_tokens}})
+$$</p>
+<ol start="2">
+<li><strong>解读与挑战</strong></li>
+</ol>
+<p>视频 PPL 的解读比音频更具挑战性：</p>
+<ul>
+<li><strong>归一化基准</strong>：PPL 是基于每个时空词元计算的。一个视频帧可能被切分为多个块（patch），一个视频片段（clip）又包含多个帧。因此，这个 PPL 值反映的是模型对“下一个局部时空区域”的预测能力。</li>
+<li><strong>动态与静态</strong>：视频内容变化剧烈。静态场景（如风景）的 PPL 可能会很低，而包含剧烈运动或场景切换的视频 PPL 会很高。因此，需要对评测集的内容类型进行细分。</li>
+<li><strong>内在指标的局限性</strong>：视频 PPL 极低可能只意味着模型学会了“复制”前一帧，而不代表它理解了视频的动态内容和语义。因此，视频 PPL 更多是作为训练过程中的一个健康检查指标，而非最终质量的决定性指标。</li>
+</ul>
+<p><strong>Rule-of-Thumb:</strong></p>
+<ul>
+<li>将视频评测集按内容类型分类：静态场景、慢速运动、快速运动、文本/UI 录屏、动画等。</li>
+<li>重点监控视频 PPL 在训练过程中的下降趋势。如果 PPL 停滞不前，可能意味着模型在学习时空动态方面遇到了瓶颈。</li>
+<li>视频 PPL 必须与视觉-语言下游任务（见下一节）结合来看，以获得对模型能力的全面评估。</li>
+</ul>
+<hr />
+<h2 id="135-">13.5 视觉-语言任务</h2>
+<p>自回归困惑度是“向内看”的指标，视觉-语言（VL）下游任务则是“向外看”，衡量模型在实际应用场景中的能力。对于预训练模型，我们通常采用零样本（Zero-shot）或少样本（Few-shot）的方式进行评测。</p>
+<p><strong>核心评测任务列表：</strong></p>
+<ol>
+<li>
+<p><strong>图像/视频描述生成 (Captioning)</strong></p>
+<ul>
+<li><strong>任务</strong>：为给定的图像或视频生成一段自然语言描述。</li>
+<li><strong>数据集</strong>：图像（COCO, Flickr30k），视频（MSR-VTT, MSVD）。</li>
+<li><strong>指标</strong>：BLEU, METEOR, ROUGE, CIDEr, SPICE。这些指标从不同维度衡量生成文本与参考答案的匹配程度。</li>
+</ul>
+</li>
+<li>
+<p><strong>视觉问答 (Visual Question Answering, VQA)</strong></p>
+<ul>
+<li><strong>任务</strong>：回答关于给定图像或视频内容的问题。</li>
+<li><strong>数据集</strong>：图像（VQAv2, GQA），视频（MSRVTT-QA, MSVD-QA）。</li>
+<li><strong>指标</strong>：准确率（Accuracy）。</li>
+</ul>
+</li>
+<li>
+<p><strong>图像/视频-文本检索 (Retrieval)</strong></p>
+<ul>
+<li><strong>任务</strong>：双向任务。文生图/视频（给定文本，在库中检索最相关的视觉内容和图/视频生文（给定视觉内容，检索最相关的文本描述）。</li>
+<li><strong>数据集</strong>：COCO, Flickr30k, DiDeMo, MSR-VTT。</li>
+<li><strong>指标</strong>：召回率@K (Recall@K, R@1, R@5, R@10)，即正确答案排在前 K 个结果中的概率。</li>
+</ul>
+</li>
+<li>
+<p><strong>视觉指令跟随 (Visual Instruction Following)</strong></p>
+<ul>
+<li><strong>任务</strong>：评测模型遵循复杂、多样化的视觉相关指令的能力，这是对模型通用性和对齐能力的综合考验。</li>
+<li><strong>数据集</strong>：MMBench, SEED-Bench, LLaVA-Bench, MMBench-CN（中文）。</li>
+<li><strong>指标</strong>：通常采用 GPT-4 打分或准确率。</li>
+</ul>
+</li>
+</ol>
+<p><strong>Rule-of-Thumb:</strong></p>
+<ul>
+<li>在训练的中后期（例如，完成 5T token 训练后）开始定期运行这些下游评测。它们计算成本较高，不适合像 PPL 那样频繁执行。</li>
+<li>建立一个自动化的评测流水线，每次生成新的 checkpoint 后，可以一键触发所有下游任务的零样本评测。</li>
+<li>对于一个生成理解一体模型，Captioning 和 VQA 的表现是衡量其多模态理解与生成能力的关键风向标。</li>
+</ul>
+<hr />
+<h2 id="136">13.6 泄漏检测与去重验证</h2>
+<p><strong>数据泄漏是评测的“头号杀手”</strong>。如果评测集中的样本或其近义/近似样本出现在训练集中，那么评测结果将被人为地、毫无意义地拔高，导致对模型能力的严重误判。</p>
+<p><strong>检测方法论：</strong></p>
+<ol>
+<li><strong>建立“隔离区”</strong>：将所有标准评测集（包括其变体）的数据视为“有毒”，建立一个严格的隔离库。</li>
+<li><strong>文本去重</strong>：<ul>
+<li><strong>精确匹配</strong>：检查评测样本文本是否原封不动地出现在训练集中。</li>
+<li><strong>n-gram 重叠</strong>：计算训练样本与评测样本之间的 n-gram（如 13-gram）重叠率。任何重叠率过高的训练样本都应被移除。</li>
+</ul>
+</li>
+<li><strong>视觉去重</strong>：<ul>
+<li><strong>感知哈希 (Perceptual Hashing)</strong>：使用 pHash, dHash, aHash 等算法为所有训练集和评测集图像/视频关键帧生成哈希值。计算汉明距离，移除距离过近（例如，&lt;5）的训练样本。</li>
+<li><strong>特征向量相似度</strong>：使用预训练的 CLIP 或其他视觉模型提取图像/视频的特征向量。计算训练样本与评测样本之间的余弦相似度，移除相似度过高（例如，&gt;0.95）的训练样本。</li>
+</ul>
+</li>
+</ol>
+<p><strong>流程集成：</strong>
+这个检测过程必须是数据预处理流水线中的一个强制步骤。在最终的训练数据打包前，必须运行完整的泄漏检测，并生成一份报告，确认训练集相对于所有评测集的“纯净度”。</p>
+<hr />
+<h2 id="137-ab">13.7 统计显著性与 A/B 标准</h2>
+<p>当我们比较两个模型（例如，模型 A 和模型 B）的评测结果时，一个常见的问题是：模型 B 在 MMBench 上比模型 A 高出 0.5%，这个提升是真实的，还是仅仅是由于评测集样本选择的随机性造成的？</p>
+<ol>
+<li>
+<p><strong>置信区间 (Confidence Intervals)</strong>
+*   对于准确率等指标，我们可以通过<strong>自助法 (Bootstrapping)</strong> 来估计其置信区间。
+*   <strong>过程</strong>：从大小为 N 的评测集中，有放回地重复抽样 N ，得到一个新的“自助样本集”。在这个样本集上计算指标。重复此过程数千次（如 5000 次），得到指标的分布。取其 2.5% 和 97.5% 分位数，即构成 95% 置信区间。
+*   <strong>判断</strong>：如果模型 A 和模型 B 的置信区间有显著重叠，那么它们的性能差异不具有统计显著性。反之，如果区间完全分离，我们可以较有信心地说一个模型优于另一个。</p>
+</li>
+<li>
+<p><strong>A/B 测试标准</strong>
+*   在项目内部，应预先设定一个“最小有意义差异”（Minimal Detectable Effect, MDE）。例如，我们规定只有当一个新模型在关键指标上（如 MMBench）的提升超过 1% 且统计显著时，才认为这次改动是成功的。
+*   这有助于团队聚焦于能带来实质性改进的创新，避免在随机噪声上浪费时间和算力。</p>
+</li>
+</ol>
+<hr />
+<h2 id="138">13.8 本章小结</h2>
+<p>本章构建了一套服务于大规模多模态模型预训练的综合评测体系。它的核心思想是<strong>内外兼修、动静结合</strong>：</p>
+<ul>
+<li><strong>内在指标 (Intrinsic)</strong>：以文本、音频、视频的<strong>自回归困惑度</strong>为核心，作为高频次的训练健康度“心电图”。我们强调了分域、分语种评测的重要性，以及如何将抽象的 PPL 与更直观的物理量（如 BPS）联系起来。</li>
+<li><strong>外在指标 (Extrinsic)</strong>：以<strong>视觉-语言下游任务</strong>为核心，作为低频次的模型综合能力“体检报告”，覆盖了描述、问答、检索、指令跟随等关键能力。</li>
+<li><strong>评测的基石</strong>：我们强调了两个不可或缺的保障措施——<strong>严格的数据泄漏检测</strong>确保评测的公平性，以及<strong>统计显著性分析</strong>确保结论的可靠性。</li>
+</ul>
+<p>一个好的评测体系，如同灯塔，能照亮模型能力提升的航程，并帮助我们规避暗礁。</p>
+<hr />
+<h2 id="139-gotchas">13.9 常见陷阱与错误 (Gotchas)</h2>
+<ol>
+<li><strong>数据污染的“无声杀手”</strong>：最严重且最常见的错误。未进行严格的泄漏检测，导致评测分数虚高，团队盲目乐观，直到模型在真世界中表现不佳时才发现问题。<strong>解决方案</strong>：将泄漏检测作为数据流水线中不可绕过的自动化强制步骤。</li>
+<li><strong>PPL 的“苹果对橘子”比较</strong>：在比较不同模型的 PPL 时，忘记了它们可能使用了不同的 Tokenizer。PPL 的值与词表大小和序列切分方式强相关。<strong>解决方案</strong>：PPL 比较的铁律是：必须在完全相同的评测集、预处理流程和 Tokenizer 下进行。</li>
+<li><strong>忽略评测集的预处理不一致</strong>：训练时图像被缩放到 336x336，评测时却用了 224x224；训练时音频是 16kHz 采样，评测时用了 48kHz。这些不一致都会导致评测结果失真。<strong>解决方案</strong>：确保评测的数据预处理流程与训练时验证（validation）阶段的流程<strong>代码级</strong>一致。</li>
+<li><strong>单一指标崇拜</strong>：过度关注某个单一指标（如某个 benchmark 的 SOTA 分数），而忽略了模型的全面能力。可能导致模型“应试”，在特定任务上过拟合，泛化能力差。<strong>解决方案</strong>：建立一个包含内在、外在、多领域、多模态的<strong>综合仪表盘</strong>，从多个维度评估模型。</li>
+<li><strong>对小数据集上的小幅提升过度解读</strong>：在只有几百个样本的小评测集上，一个模型提升了 2%，这很可能只是随机波动。<strong>解决方案</strong>：始终进行统计显著性检验（如 Bootstrap），并报告置信区间，为决策提供更可靠的依据。</li>
+<li><strong>忘记归一化多模态 PPL</strong>：直接报告一个原始的音频或视频 PPL，却不说明其对应的 token 速率（token/sec）。这使得结果难以被他人理解或复现。<strong>解决方案</strong>：报告音频 PPL 时，总是附带其对应的 BPS；报告视频 PPL 时，说明其时空 tokenization 的配置。</li>
+</ol>
+            </article>
+            
+            <nav class="page-nav"><a href="chapter12.html" class="nav-link prev">← 第十二章：监控与可观测性</a><a href="chapter14.html" class="nav-link next">第十四章：安全与合规 →</a></nav>
+        </main>
+    </div>
+</body>
+</html>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="./">
-    <title>chapter2.md — 项目管理与里程碑</title>
+    <title>项目管理与里程碑</title>
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/highlight.css">
     <script src="assets/script.js" defer></script>
@@ -42,13 +42,125 @@
                 <input type="text" id="sidebar-search-input" placeholder="搜索..." autocomplete="off">
             </div>
             <div id="tree-container">
-                <ul class="nav-list"><li class=""><a href="index.html">index.md（导读与目录）</a></li><li class=""><a href="chapter1.html">Chapter 1: 总览与技术路线</a></li><li class="active"><a href="chapter2.html">chapter2.md — 项目管理与里程碑</a></li><li class=""><a href="chapter3.html">chapter2.md — 项目管理与里程碑</a></li><li class=""><a href="chapter4.html">第 4 章 文本数据：抓取、清洗、去重与质量分层</a></li><li class=""><a href="chapter5.html">第 5 章 — 音频数据：合规抓取、ASR 对齐、RVQ 离散化</a></li><li class=""><a href="chapter6.html">第 6 章 — 视频数据：合规抓取、切片与时空离散化</a></li><li class=""><a href="chapter7.html">第七章：图像数据——采集、质量打分与离散化</a></li><li class=""><a href="chapter8.html">第八章：Tokenizer 与词表：多模扩词、特殊符与对齐标注</a></li><li class=""><a href="CLAUDE.html">Untitled</a></li></ul>
+                <nav class="tree-nav" role="tree">
+                    <div class="tree-item " >
+                        <a href="index.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">index.md（导读与目录）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter1.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Chapter 1: 总览与技术路线</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item active" >
+                        <a href="chapter2.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">项目管理与里程碑</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter3.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第三章：数据配方设计（100T token 池）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter4.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 4 章 文本数据：抓取、清洗、去重与质量分层</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter5.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 5 章 — 音频数据：合规抓取、ASR 对齐、RVQ 离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter6.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 6 章 — 视频数据：合规抓取、切片与时空离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter7.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 7 章 — 图像数据：采集、质量打分与离散化</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter8.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Tokenizer 与词表：多模扩词、特殊符与对齐</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter9.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">模型结构与超参数（1B/10B）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter10.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十章：训练基础设施（Megatron @ 256×H100）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter11.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第 11 章：数据混采与课程策略（10T token 单轮）</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter12.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十二章：监控与可观测性</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter13.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十三章 评测体系：从自回归困惑度到视觉语言指标</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="chapter14.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">第十四章：安全与合规</span>
+                        </a>
+                    </div>
+                
+                    <div class="tree-item " >
+                        <a href="CLAUDE.html" class="tree-link">
+                            <span class="tree-icon">📄</span>
+                            <span class="tree-title">Untitled</span>
+                        </a>
+                    </div>
+                </nav>
             </div>
         </nav>
         
         <main class="content">
             <article>
-                <h1 id="chapter2md">chapter2.md — 项目管理与里程碑</h1>
+                <h1 id="_1">项目管理与里程碑</h1>
 <h2 id="21">2.1 开篇与学习目标</h2>
 <p>欢迎来到第二章。在本章中，我们将从代码和算法的细节中暂时抽离，聚焦于成功交付一个大规模多模态预训练模型所必需的“软技能”——项目管理、团队协作与风险控制。训练一个万亿（Trillion） token 级别的模型，其复杂性不亚于建造一座数据中心或发射一颗卫星。它不仅是技术挑战，更是一场严谨的、跨职能的工程战役。一个清晰的路线图、明确的角色分工和严格的里程碑管理，是确保项目在预算内、按时交付、且不偏离技术目标的生命线。</p>
 <p>本章的目标是让您掌握：</p>
@@ -340,7 +452,7 @@
 </ol>
             </article>
             
-            <nav class="page-nav"><a href="chapter1.html" class="nav-link prev">← Chapter 1: 总览与技术路线</a><a href="chapter3.html" class="nav-link next">chapter2.md — 项目管理与里程碑 →</a></nav>
+            <nav class="page-nav"><a href="chapter1.html" class="nav-link prev">← Chapter 1: 总览与技术路线</a><a href="chapter3.html" class="nav-link next">第三章：数据配方设计（100T token 池） →</a></nav>
         </main>
     </div>
 </body>
